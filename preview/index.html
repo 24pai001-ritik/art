@@ -243,7 +243,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 .detail figcaption{font-size:12px;line-height:1.4;opacity:.8;max-width:22ch}
 .detail figcaption i{font-family:var(--display);font-size:15px}
 .home-art,.home-tag{display:none}
-.dirpick{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:4px;align-items:center;
+.dirpick{position:fixed;left:50%;transform:translateX(-50%);top:calc(14px + env(safe-area-inset-top,0px));z-index:30;display:flex;gap:4px;align-items:center;
   font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:rgba(20,16,12,.82);color:#efe9df;padding:4px 6px}
 .dirpick button{background:none;border:1px solid transparent;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;padding:2px 6px;cursor:pointer}
 .dirpick button[aria-pressed="true"]{border-color:#efe9df}
@@ -262,8 +262,11 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 :root[data-dir] .detail{display:flex}
 
 /* A. Linen studio: raw linen ground, umber oil strokes, the label painted on a swatch of primed white */
-:root[data-dir="a"] body{background-size:820px auto;background-repeat:repeat}
-:root[data-dir="a"]{--ground:#CDBB9C;--tex:url(img/tex/linen.webp);--ink:#2A1D13;--muted:#5E4A37;--line:rgba(42,29,19,.28);--panel:rgba(255,250,240,.35);--tex-blend:multiply;color-scheme:light}
+:root[data-dir] #v-work{--wall:var(--ground)!important;--wall-ink:var(--ink)!important;--wall-line:var(--line)!important;background:none}
+:root[data-dir="a"] #v-home{background:#CDBB9C url(img/tex/linen.webp) 0 0/820px auto repeat}
+#workNote.placeholder{display:none}
+:root[data-dir="c"] .hang img{box-shadow:0 0 0 1px rgba(239,230,214,.22),0 2px 3px rgba(0,0,0,.4),0 26px 44px -14px rgba(0,0,0,.7)}
+:root[data-dir="a"]{--ground:#E9E1D2;--tex:url(img/tex/primed.webp);--ink:#2A1D13;--muted:#5E4A37;--line:rgba(42,29,19,.28);--panel:rgba(255,250,240,.35);--tex-blend:multiply;color-scheme:light}
 :root[data-dir="a"] .hp1{--pc:#4A2E1B;width:min(820px,72vw);height:min(300px,27vw);left:-5vw;bottom:calc(clamp(20px,6vh,64px) + 58px)}
 :root[data-dir="a"] .hp2{--pc:#8A5E36;width:110px;height:100px;right:calc(11vw - 60px);top:3vh}
 :root[data-dir="a"] .hp3{--pc:#2A1D13;width:min(360px,38vw);height:44px;left:1vw;bottom:clamp(4px,1.5vh,14px);opacity:.7}
@@ -312,7 +315,10 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
   :root[data-dir="c"] .hp1{width:150vw;height:44vw;left:-25vw;top:38vh}
   :root[data-dir="c"] .hp2{display:none}
   :root[data-dir] .detail,:root[data-dir] .wp1,:root[data-dir] .wp2{display:none}
-  .dirpick{display:none}
+  .dirpick{top:calc(12px + env(safe-area-inset-top,0px));left:44%;padding:2px 3px;gap:1px}
+  .dirpick .dp-x{display:none}
+  .dirpick button{padding:2px 6px}
+  :root[data-dir="b"] .hp2,:root[data-dir="b"] .ts{display:none}
 }
 @media (max-height:620px){ :root[data-dir] .detail{display:none} }
 
@@ -431,7 +437,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
   </div>
 </div>
 
-<div class="dirpick" id="dirpick">Look <button type="button" data-d="a">A Linen</button><button type="button" data-d="b">B Paper</button><button type="button" data-d="c">C Studio</button> · sample prices</div>
+<div class="dirpick" id="dirpick" aria-label="Choose a look"><span class="dp-x">Look</span><button type="button" data-d="a">A<span class="dp-x"> Linen</span></button><button type="button" data-d="b">B<span class="dp-x"> Paper</span></button><button type="button" data-d="c">C<span class="dp-x"> Studio</span></button><span class="dp-x">Sample prices</span></div>
 <i class="paint wipe" id="wipe" aria-hidden="true"></i>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -562,7 +568,7 @@ let current = null, buyTab = "original", printPick = 1;
 function renderWork(slug){
   const a = bySlug[slug]; current = a; const v = $("#v-work"), t = wallFor(slug);
   v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
-  document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall;
+  if(document.documentElement.dataset.dir){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; } else { document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall; }
   $("#room").classList.remove("reading");
   const img = $("#workImg"); img.src = `img/${slug}.webp`;
   const HAS_DETAIL = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"];
