@@ -5,3 +5,5 @@ dist/
 .env*
 .dev.vars
 content/raw/
+content/gen/*.jpg
+content/gen/*.png

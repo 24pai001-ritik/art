@@ -1,0 +1,670 @@
+<title>Jomy Johnson Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: one viewing room at a time. Each work gets a wall tinted from its own edges, with a museum label (tombstone) beside it. Nothing scrolls; you walk from room to room. */
+:root{
+  --ground:#E9E8E3;      /* cold-press paper, not cream */
+  --ink:#1C1916;
+  --muted:#6A655E;
+  --line:#CBC8C0;
+  --linen:#8A6C49;       /* raw linen: her support */
+  --panel:#F3F2EE;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --text:"Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --bar:56px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#16120F; --ink:#ECE6DC; --muted:#A49C90; --line:#3A332C; --linen:#C7A77F; --panel:#1F1A16; color-scheme:dark}}
+:root[data-theme="dark"]{--ground:#16120F; --ink:#ECE6DC; --muted:#A49C90; --line:#3A332C; --linen:#C7A77F; --panel:#1F1A16; color-scheme:dark}
+
+html,body{height:100%;overflow:hidden}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--linen);outline-offset:3px}
+.app{height:100%;display:flex;flex-direction:column;min-height:0}
+
+/* top bar */
+.bar{height:var(--bar);flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  position:relative;z-index:5;color:var(--bar-ink,var(--ink));transition:color .4s}
+.mark{font-family:var(--display);font-size:22px;letter-spacing:.01em;text-decoration:none;white-space:nowrap}
+.mark i{font-style:italic;font-weight:300}
+.nav{display:flex;gap:clamp(12px,3vw,28px);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.nav a{text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
+.nav a[aria-current="page"]{border-color:currentColor}
+.views{flex:1;min-height:0;position:relative}
+.view{position:absolute;inset:0;display:none;min-height:0}
+.view.on{display:flex}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid currentColor;background:transparent;
+  padding:11px 18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;border-radius:0;text-decoration:none;white-space:nowrap}
+.btn.solid{background:var(--b-ink,var(--ink));color:var(--b-bg,var(--ground));border-color:var(--b-ink,var(--ink))}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.note{font-size:11px;color:var(--muted)}
+
+/* home */
+#v-home{position:absolute;inset:0;top:calc(-1 * var(--bar))}
+#v-home canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.home-copy{position:absolute;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:clamp(20px,6vh,64px);
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;color:#1C1916}
+.home-copy h1{font-family:var(--display);font-weight:300;font-size:clamp(40px,8vw,104px);line-height:.92;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.home-copy h1 i{font-weight:300}
+.home-copy p{margin:10px 0 0;font-size:14px;max-width:38ch;opacity:.9}
+.home-copy .acts{display:flex;gap:10px;flex-wrap:wrap}
+.home-copy .btn{color:#1C1916;background:rgba(250,249,246,.6)}
+.home-copy .btn.solid{background:#1C1916;color:#F4F0E8;border-color:#1C1916}
+.scale[hidden]{display:none}
+.home-label{position:absolute;font-size:11px;line-height:1.35;color:#2a2420;background:rgba(250,248,244,.92);padding:6px 9px;pointer-events:none;max-width:160px}
+.home-label i{font-family:var(--display);font-size:13px}
+
+/* works index */
+#v-works{flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:4px 16px;gap:12px}
+.works-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.works-head h2{font-family:var(--display);font-weight:300;font-size:clamp(26px,3.4vw,40px);margin:0}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;padding:6px 12px;font-size:12px;cursor:pointer;border-radius:999px}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--ground)}
+.grid{flex:1;min-height:0;display:grid;gap:clamp(8px,1.6vw,22px);grid-template-columns:repeat(var(--cols,5),minmax(0,1fr));grid-auto-rows:minmax(0,1fr)}
+.tile{min-height:0;display:flex;flex-direction:column;gap:6px;text-decoration:none;cursor:pointer;background:none;border:0;padding:0;text-align:left}
+.tile .frame{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:var(--panel);padding:clamp(6px,1.2vw,16px)}
+.tile img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 6px 16px rgba(0,0,0,.18);transition:transform .35s}
+.tile:hover img{transform:translateY(-3px)}
+.tile .cap{display:flex;justify-content:space-between;gap:8px;font-size:12px;line-height:1.3}
+.tile .cap i{font-family:var(--display);font-size:15px}
+.tile .cap span:last-child{color:var(--muted);white-space:nowrap}
+
+/* single work: the viewing room */
+#v-work{background:var(--wall);color:var(--wall-ink);transition:background .5s,color .5s}
+.room{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,1fr);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 18px;gap:clamp(16px,4vw,64px)}
+.hang{min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
+.hang img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 2px 3px rgba(0,0,0,.25),0 22px 40px -12px rgba(0,0,0,.45);cursor:zoom-in}
+.hang .story{display:none;max-width:46ch;font-family:var(--display);font-size:20px;line-height:1.45}
+.room.reading .hang img{display:none}.room.reading .hang .story{display:block}
+.label{min-height:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2vh,20px);max-width:440px}
+.tomb{border-left:1px solid var(--wall-line);padding-left:16px}
+.tomb h2{font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(28px,3.2vw,44px);line-height:1.05;margin:0 0 8px}
+.tomb .facts{font-size:13px;line-height:1.55;opacity:.85}
+.tomb .placeholder{font-family:var(--display);font-style:italic;font-size:15px;opacity:.6;margin-top:8px}
+.buy{display:flex;flex-direction:column;gap:12px}
+.tabs{display:flex;border-bottom:1px solid var(--wall-line)}
+.tabs button{background:none;border:0;padding:8px 0;margin-right:22px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;opacity:.6;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{opacity:1;border-color:currentColor}
+.price{font-family:var(--display);font-size:30px;font-weight:300;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--text);font-size:12px;opacity:.7;margin-left:6px}
+.sizes{display:flex;flex-direction:column;gap:6px}
+.sizes label{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--wall-line);padding:8px 12px;cursor:pointer;font-size:13px;font-variant-numeric:tabular-nums}
+.sizes input{accent-color:currentColor;margin:0 8px 0 0}
+.sizes label:has(input:checked){border-color:currentColor}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+#v-work .btn.solid{--b-ink:var(--wall-ink);--b-bg:var(--wall)}
+.walk{display:flex;justify-content:space-between;gap:12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.walk button,.linkish{background:none;border:0;padding:4px 0;cursor:pointer;letter-spacing:inherit;text-transform:inherit;font-size:inherit;opacity:.75;text-decoration:underline;text-underline-offset:4px}
+.walk button:hover,.linkish:hover{opacity:1}
+.sold{font-size:12px;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:4px 8px;align-self:flex-start}
+
+/* about */
+#v-about{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 18px;gap:clamp(16px,4vw,56px)}
+.about-pic{flex:1.1;min-height:0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.about-pic img{flex:1;min-height:0;width:100%;object-fit:cover}
+.about-text{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2.2vh,22px);max-width:560px}
+.about-text h2{font-family:var(--display);font-weight:300;font-size:clamp(30px,4vw,52px);line-height:1;margin:0}
+.about-text p{margin:0;max-width:60ch}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid var(--line);padding-top:14px}
+.steps b{display:block;font-family:var(--display);font-weight:400;font-size:17px}
+.steps span{font-size:13px;color:var(--muted)}
+.pack{display:flex;gap:14px;align-items:center;min-height:0}
+.pack img{width:clamp(90px,14vw,180px);aspect-ratio:4/3;object-fit:cover;flex:none}
+.contact{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}
+.contact span{color:var(--muted)}
+
+/* cart */
+#v-cart{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 16px;gap:clamp(16px,4vw,56px)}
+.cart-list,.cart-form{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:12px}
+.cart-list h2,.cart-form h2{font-family:var(--display);font-weight:300;font-size:clamp(26px,3vw,38px);margin:0}
+.line{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+.line img{width:56px;height:56px;object-fit:contain;background:var(--panel)}
+.line i{font-family:var(--display);font-size:17px}
+.line .meta{font-size:12px;color:var(--muted)}
+.line .r{text-align:right;font-variant-numeric:tabular-nums}
+.line button{font-size:11px}
+.totals{display:flex;flex-direction:column;gap:4px;font-variant-numeric:tabular-nums}
+.totals div{display:flex;justify-content:space-between}
+.totals .t{font-family:var(--display);font-size:22px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+form .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0}
+.field label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field input,.field textarea{border:0;border-bottom:1px solid var(--line);background:transparent;padding:6px 0;font:inherit;color:inherit;resize:none;min-width:0}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--ink)}
+.pay{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(14px,3vw,28px);align-items:center}
+.qr{width:clamp(130px,22vh,200px);aspect-ratio:1;position:relative;background:#fff;padding:10px}
+.qr canvas,.qr img{width:100%!important;height:100%!important;filter:blur(5px)}
+.qr .veil{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;padding:16px;color:#1C1916;background:rgba(255,255,255,.55)}
+.empty{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px}
+.empty p{font-family:var(--display);font-size:24px;margin:0;font-weight:300}
+
+/* zoom */
+.zoom{position:fixed;inset:0;z-index:20;background:#0E0C0A;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.zoom.on{display:flex}
+.zoom img{max-width:100%;max-height:100%;object-fit:contain}
+.zoom .x{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));color:#eee;border-color:#eee}
+
+/* wall try-on */
+.wall{position:fixed;inset:0;z-index:15;background:var(--ground);display:none;flex-direction:column}
+.wall.on{display:flex}
+.wall-top{height:var(--bar);flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);box-sizing:content-box}
+.wall-top b{font-family:var(--display);font-weight:400;font-size:19px}
+.wall-top b i{font-weight:400}
+.wall-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 16px}
+.stage{position:relative;min-height:0;min-width:0;background:var(--panel)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.stage .hint{position:absolute;left:10px;bottom:10px;font-size:12px;background:rgba(20,16,12,.72);color:#f3efe8;padding:6px 10px;max-width:calc(100% - 20px)}
+.controls{min-height:0;display:flex;flex-direction:column;gap:clamp(8px,1.6vh,16px)}
+.controls .grp{display:flex;flex-direction:column;gap:6px}
+.rooms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.rooms button{border:1px solid var(--line);background:var(--panel);padding:0;cursor:pointer;aspect-ratio:4/3;overflow:hidden;position:relative;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.rooms button img{width:100%;height:100%;object-fit:cover;display:block}
+.rooms button[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
+.rooms .own{display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;line-height:1.2}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:transparent;padding:6px 10px;font-size:12px;cursor:pointer;font-variant-numeric:tabular-nums}
+.seg button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--ground)}
+.scale{display:flex;flex-direction:column;gap:6px;border:1px dashed var(--line);padding:10px;font-size:12px}
+.scale .row{display:flex;gap:8px;align-items:center}
+.scale input{width:72px;border:0;border-bottom:1px solid var(--line);background:transparent;padding:4px 0;font-variant-numeric:tabular-nums}
+.privacy{font-size:11px;color:var(--muted);margin-top:auto}
+.preview-flag{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--ground);padding:4px 8px;opacity:.75;pointer-events:none}
+
+/* tablet */
+@media (max-width:1000px){
+  .grid{--cols:3}
+  .room{grid-template-columns:minmax(0,1fr) minmax(250px,.9fr)}
+  .wall-body{grid-template-columns:minmax(0,1fr) 250px}
+}
+/* phone */
+@media (max-width:640px){
+  :root{--bar:50px}
+  .mark{font-size:18px}
+  .nav{gap:14px;font-size:11px}
+  .grid{--cols:3;gap:8px}
+  .tile .cap span:last-child{display:none}
+  .tile .cap i{font-size:13px}
+  .room{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:12px;padding-block:0 12px}
+  .label{max-width:none;gap:10px}
+  .tomb h2{font-size:26px;margin-bottom:4px}
+  .tomb .facts{font-size:12px}
+  .tomb .placeholder{display:none}
+  .price{font-size:24px}
+  .sizes{flex-direction:row;flex-wrap:wrap}
+  .sizes label{flex:1 1 30%;flex-direction:column;align-items:flex-start;gap:2px;padding:6px 8px;font-size:12px}
+  .btn{padding:10px 12px}
+  #v-about{flex-direction:column;gap:12px}
+  .about-pic{flex:0 0 22%}
+  .about-pic .note{display:none}
+  .steps{grid-template-columns:1fr;gap:6px}
+  .steps span{display:none}
+  .pack{display:none}
+  #v-cart{flex-direction:column;gap:12px}
+  .cart-list{flex:0 1 auto}
+  .line{grid-template-columns:40px minmax(0,1fr) auto}
+  .line img{width:40px;height:40px}
+  form{gap:6px}
+  .wall-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:10px}
+  .controls{gap:8px}
+  .rooms{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .rooms button{aspect-ratio:16/9}
+  .privacy{display:none}
+  .preview-flag{display:none}
+}
+@media (max-height:620px){ .tomb .placeholder,.steps span,.pack,.privacy{display:none} .price{font-size:24px} }
+@media (max-height:520px) and (max-width:640px){ .about-pic{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app" id="app">
+  <header class="bar">
+    <a class="mark" href="#home" aria-label="Jomy Johnson, home">Jomy <i>Johnson</i></a>
+    <nav class="nav" aria-label="Main">
+      <a href="#works" data-nav="works">Works</a>
+      <a href="#about" data-nav="about">About</a>
+      <a href="#cart" data-nav="cart" id="cartLink">Cart 0</a>
+    </nav>
+  </header>
+
+  <main class="views">
+    <section class="view" id="v-home" aria-label="Home">
+      <canvas id="homeCanvas"></canvas>
+      <div class="home-label" id="homeLabel" hidden></div>
+      <div class="home-copy">
+        <div>
+          <h1>Jomy<br><i>Johnson</i></h1>
+          <p>Oil paintings, watercolours and drawings, made in Ahmedabad. Every original is one of one; prints are made and packed by the artist.</p>
+        </div>
+        <div class="acts">
+          <a class="btn solid" href="#works">See the works</a>
+          <a class="btn" href="#grief">Walk in</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="v-works" aria-label="Works">
+      <div class="works-head">
+        <h2>Works, 2025 to 2026</h2>
+        <div class="filters" id="filters"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="view" id="v-work" aria-label="Artwork">
+      <div class="room" id="room">
+        <div class="hang">
+          <img id="workImg" alt="">
+          <div class="story" id="workStory"></div>
+        </div>
+        <div class="label">
+          <div class="tomb">
+            <h2 id="workTitle"></h2>
+            <div class="facts" id="workFacts"></div>
+            <div class="placeholder" id="workNote">Jomy's own words about this piece will go here.</div>
+          </div>
+          <div class="buy" id="buy"></div>
+          <div class="walk">
+            <button type="button" id="prevWork">Previous</button>
+            <button type="button" id="allWorks">All works</button>
+            <button type="button" id="nextWork">Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="v-about" aria-label="About">
+      <div class="about-pic">
+        <img id="studioImg" alt="A painting table by a window, with a palette of earthy oil colours and brushes in a jar">
+        <div class="note">Studio picture is a stand-in until Jomy sends her own.</div>
+      </div>
+      <div class="about-text">
+        <div class="eyebrow">The artist</div>
+        <h2>Jomy Johnson</h2>
+        <p>Jomy Johnson is a fine artist in Ahmedabad. She trained at the Kanoria Centre for Arts, where she earned a Diploma in Fine Arts, and she now teaches drawing and painting there. She paints in oil on linen and paper, sketches flowers in watercolour from life, and draws in coloured pencil, charcoal and graphite.</p>
+        <div class="steps">
+          <div><b>One of one</b><span>Each original is signed and sold once. When it is sold, it is marked sold here.</span></div>
+          <div><b>Prints by hand</b><span>Jomy checks every print against the painting before it leaves the studio.</span></div>
+          <div><b>Packed with care</b><span>Wrapped in kraft paper with corner guards and sent by tracked courier.</span></div>
+        </div>
+        <div class="pack">
+          <img id="packImg" alt="Hands wrapping a framed artwork in kraft paper with corner guards">
+          <div class="contact"><div><span>Studio</span><br>Ahmedabad, Gujarat</div><div><span>Commissions</span><br>Portraits and still life, by request</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="v-cart" aria-label="Cart"></section>
+  </main>
+</div>
+
+<div class="zoom" id="zoom" role="dialog" aria-label="Full view"><img id="zoomImg" alt=""><button class="btn x" type="button">Close</button></div>
+
+<div class="wall" id="wall" role="dialog" aria-label="See it on your wall">
+  <div class="wall-top">
+    <b id="wallTitle"></b>
+    <button class="btn" type="button" id="wallClose">Close</button>
+  </div>
+  <div class="wall-body">
+    <div class="stage" id="stage">
+      <canvas id="wallCanvas"></canvas>
+      <div class="hint" id="wallHint">Drag the work to move it. Its size is to scale.</div>
+    </div>
+    <div class="controls">
+      <div class="grp"><div class="eyebrow">Room</div><div class="rooms" id="roomPick"></div>
+        <input type="file" id="wallFile" accept="image/*" hidden></div>
+      <div class="scale" id="scaleBox" hidden>
+        <div><b>Set the scale of your photo.</b> Drag the two round ends onto something whose width you know: a door is about 90 cm, a switch board about 12 cm.</div>
+        <div class="row"><label for="scaleCm">That is</label><input id="scaleCm" type="number" min="1" max="2000" value="90"><span>cm wide</span></div>
+      </div>
+      <div class="grp"><div class="eyebrow">Size</div><div class="seg" id="sizePick"></div></div>
+      <div class="grp"><div class="eyebrow">Frame</div><div class="seg" id="framePick"></div></div>
+      <div class="acts"><button class="btn solid" type="button" id="wallAdd">Add to cart</button><button class="btn" type="button" id="wallSave" hidden>Save picture</button></div>
+      <div class="privacy">Your wall photo stays on your phone or computer. It is never uploaded.</div>
+    </div>
+  </div>
+</div>
+
+<div class="preview-flag">Preview · sample prices</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ---------- data (sizes and prices are placeholders until Jomy confirms) ---------- */
+const ART = [
+  {slug:"grief", title:"Grief", medium:"Oil on linen", year:2026, kind:"Oil", cm:[33,30], price:24000, status:"available", prints:true},
+  {slug:"vacant", title:"Vacant", medium:"Oil on linen", year:2026, kind:"Oil", cm:[30,28], price:22000, status:"available", prints:true},
+  {slug:"old-man", title:"Old Man", medium:"Oil on paper", year:2026, kind:"Oil", cm:[20,28], price:14000, status:"available", prints:true},
+  {slug:"paper-weight", title:"Paper Weight", medium:"Oil on paper", year:2025, kind:"Oil", cm:[21,25], price:9000, status:"sold", prints:true},
+  {slug:"roses", title:"Live Sketch of Roses", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[26,30], price:7500, status:"available", prints:true},
+  {slug:"hibiscus", title:"Live Sketch of Hibiscus", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[30,27], price:7000, status:"available", prints:true},
+  {slug:"acceptance", title:"Acceptance", medium:"Coloured pencils on paper", year:2026, kind:"Drawing", cm:[21,28], price:8500, status:"available", prints:true},
+  {slug:"bargue-charcoal", title:"Charles Bargue Study", medium:"Charcoal on paper", year:2026, kind:"Drawing", cm:[42,55], price:null, status:"study", prints:false},
+  {slug:"bargue-graphite", title:"Charles Bargue Study", medium:"Graphite on paper", year:2025, kind:"Drawing", cm:[21,26], price:null, status:"study", prints:false},
+];
+/* wall colour sampled from each work's own edges (preview/img/_meta.json) */
+const EDGE = {"grief":"#232026","vacant":"#2a201f","old-man":"#563b33","paper-weight":"#b68065","roses":"#bdb7bc","hibiscus":"#d1d5ce","acceptance":"#d1cbc3","bargue-charcoal":"#999893","bargue-graphite":"#c8c9bf"};
+const PRINT_LONG = [{name:"Small", long:30, price:1400},{name:"Medium", long:45, price:2400},{name:"Large", long:60, price:3800}];
+const SHIPPING = 150;
+/* sample rooms: furniture of known width gives pixels per cm (measured on each photo) */
+const ROOMS = [
+  {id:"room_living", label:"Living room", src:"img/room_living.webp", known:"sofa", cm:200, px:[252,963], anchor:[607,330]},
+  {id:"room_bedroom", label:"Bedroom", src:"img/room_bedroom.webp", known:"headboard", cm:160, px:[338,866], anchor:[602,365]},
+  {id:"room_study", label:"Study", src:"img/room_study.webp", known:"desk", cm:120, px:[349,886], anchor:[618,276]},
+];
+const GALLERY = {src:"img/gallery_wall.webp", cm:150, px:[481,902], anchor:[695,291]};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const inr = n => "₹" + n.toLocaleString("en-IN");
+const bySlug = Object.fromEntries(ART.map(a => [a.slug, a]));
+const imgCache = {};
+function loadImg(src){ return imgCache[src] ||= new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; }); }
+function hexRgb(h){ const n = parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgbHex(r){ return "#" + r.map(v => Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")).join(""); }
+function lum([r,g,b]){ const f = v => { v/=255; return v<=.03928? v/12.92 : ((v+.055)/1.055)**2.4; }; return .2126*f(r)+.7152*f(g)+.0722*f(b); }
+/* a wall a little calmer than the painting's own edge, so the work still stands out */
+function wallFor(slug){
+  const e = hexRgb(EDGE[slug] || "#cccccc"); const L = lum(e);
+  const grey = e.reduce((a,b)=>a+b)/3;
+  let w = e.map(v => v*.72 + grey*.28);
+  w = L < .2 ? w.map(v => v*.78 + 6) : w.map(v => v + (250 - v)*.35);
+  const dark = lum(w) < .25;
+  return {wall: rgbHex(w), ink: dark ? "#EFE9DF" : "#1C1916", line: dark ? "rgba(239,233,223,.25)" : "rgba(28,25,22,.22)"};
+}
+function printSizes(a){ const [w,h] = a.cm, m = Math.max(w,h); return PRINT_LONG.map(p => ({...p, w: Math.round(w/m*p.long), h: Math.round(h/m*p.long)})); }
+function store(k, v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)||"null"); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
+
+/* ---------- cart ---------- */
+let cart = store("jj-cart") || [];
+function saveCart(){ store("jj-cart", cart); $("#cartLink").textContent = "Cart " + cart.length; }
+function addToCart(item){
+  if(item.type==="original" && cart.some(c => c.slug===item.slug && c.type==="original")) { location.hash = "cart"; return; }
+  cart.push(item); saveCart(); location.hash = "cart";
+}
+
+/* ---------- scene renderer (home + wall tool share it) ---------- */
+const FRAMES = {
+  none:{label:"No frame", w:0, mat:0},
+  black:{label:"Black", w:2.2, mat:0, color:"#1b1917"},
+  oak:{label:"Oak", w:2.8, mat:0, color:"#a5784b"},
+  mount:{label:"White mount", w:1.6, mat:6, color:"#25211d"},
+};
+function drawFramed(ctx, art, x, y, w, h, frame, pxPerCm){
+  const f = FRAMES[frame], fw = f.w*pxPerCm, mw = f.mat*pxPerCm;
+  const W = w + 2*(fw+mw), H = h + 2*(fw+mw), X = x - fw - mw, Y = y - fw - mw;
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,.38)"; ctx.shadowBlur = Math.max(6, W*.06); ctx.shadowOffsetY = Math.max(3, H*.03);
+  ctx.fillStyle = f.color || "#000"; ctx.fillRect(X, Y, W, H);
+  ctx.restore();
+  if(f.w){ /* simple bevel so the frame reads as wood or lacquer, not a flat box */
+    ctx.fillStyle = f.color; ctx.fillRect(X, Y, W, H);
+    ctx.fillStyle = "rgba(255,255,255,.10)"; ctx.fillRect(X, Y, W, Math.max(1,fw*.35));
+    ctx.fillStyle = "rgba(0,0,0,.18)"; ctx.fillRect(X, Y+H-Math.max(1,fw*.35), W, Math.max(1,fw*.35));
+  }
+  if(mw){ ctx.fillStyle = "#F3F1EC"; ctx.fillRect(x-mw, y-mw, w+2*mw, h+2*mw);
+    ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(x-1, y-1, w+2, 1.5); }
+  ctx.drawImage(art, x, y, w, h);
+  return {X, Y, W, H};
+}
+
+/* ---------- home ---------- */
+async function drawHome(){
+  const c = $("#homeCanvas"), r = c.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+  c.width = r.width*dpr; c.height = r.height*dpr; const ctx = c.getContext("2d");
+  const a = bySlug["grief"];
+  let room, art;
+  try{ [room, art] = await Promise.all([loadImg(GALLERY.src), loadImg("img/grief.webp")]); }catch(e){ room = null; art = await loadImg("img/grief.webp"); }
+  if(!room || !GALLERY.px[1]){ /* fallback: a plain umber wall */
+    ctx.fillStyle = wallFor("grief").wall; ctx.fillRect(0,0,c.width,c.height);
+    const h = c.height*.42, w = h*a.cm[0]/a.cm[1]; drawFramed(ctx, art, (c.width-w)/2, c.height*.16, w, h, "none", 1); return;
+  }
+  /* cover-fit the room, keep the true scale of the painting */
+  /* walk up close: zoom the gallery so the small work holds the screen, centred on the hanging point */
+  const cover = Math.max(c.width/room.width, c.height/room.height);
+  const s = cover * (c.width < 700 ? 1.7 : 1.25);
+  let ox = c.width*(c.width < 700 ? .5 : .42) - GALLERY.anchor[0]*s, oy = c.height*.38 - GALLERY.anchor[1]*s;
+  ox = Math.min(0, Math.max(c.width - room.width*s, ox)); oy = Math.min(0, Math.max(c.height - room.height*s, oy));
+  ctx.drawImage(room, ox, oy, room.width*s, room.height*s);
+  const pxPerCm = (GALLERY.px[1]-GALLERY.px[0])/GALLERY.cm*s;
+  const w = a.cm[0]*pxPerCm, h = a.cm[1]*pxPerCm;
+  const cx = ox + GALLERY.anchor[0]*s, cy = oy + GALLERY.anchor[1]*s;
+  const box = drawFramed(ctx, art, cx - w/2, cy - h/2, w, h, "none", pxPerCm);
+  const lab = $("#homeLabel"); lab.hidden = false;
+  lab.innerHTML = `<i>${a.title}</i>, ${a.year}<br>${a.medium}<br>${a.cm[0]} × ${a.cm[1]} cm`;
+  lab.style.left = (box.X + box.W)/dpr + 18 + "px"; lab.style.top = (box.Y + box.H*.55)/dpr + "px";
+  if((box.X + box.W)/dpr + 190 > r.width) lab.hidden = true;
+}
+
+/* ---------- works grid ---------- */
+let filter = "All";
+function renderWorks(){
+  const kinds = ["All","Oil","Watercolour","Drawing"];
+  $("#filters").innerHTML = kinds.map(k => `<button class="chip" type="button" aria-pressed="${k===filter}" data-k="${k}">${k}</button>`).join("");
+  const list = ART.filter(a => filter==="All" || a.kind===filter);
+  const g = $("#grid");
+  const wide = innerWidth > 1000, phone = innerWidth <= 640;
+  const cols = phone ? 3 : wide ? Math.min(5, Math.max(3, Math.ceil(list.length/2))) : 3;
+  g.style.setProperty("--cols", cols);
+  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img src="img/${a.slug}-sm.webp" alt="${a.title}, ${a.medium}" loading="lazy"></div>
+    <div class="cap"><i>${a.title}</i><span>${a.status==="sold"?"Sold · prints":a.status==="study"?"Study":inr(a.price)}</span></div></a>`).join("");
+}
+$("#filters").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if(!b) return; filter = b.dataset.k; renderWorks(); });
+
+/* ---------- single work ---------- */
+let current = null, buyTab = "original", printPick = 1;
+function renderWork(slug){
+  const a = bySlug[slug]; current = a; const v = $("#v-work"), t = wallFor(slug);
+  v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
+  document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall;
+  $("#room").classList.remove("reading");
+  const img = $("#workImg"); img.src = `img/${slug}.webp`; img.alt = `${a.title}, ${a.medium}, ${a.year}`;
+  $("#workTitle").textContent = a.title;
+  $("#workFacts").innerHTML = `${a.year}<br>${a.medium}<br>${a.cm[0]} × ${a.cm[1]} cm`;
+  if(a.status!=="available") buyTab = "print"; else if(!a.prints) buyTab = "original";
+  renderBuy();
+}
+function renderBuy(){
+  const a = current, b = $("#buy");
+  if(a.status==="study"){
+    b.innerHTML = `<div class="sold">Study · not for sale</div><p class="note" style="color:inherit;opacity:.75;margin:0">A copy of a Charles Bargue plate, drawn as academic training. Shown here as part of her practice.</p>`; return;
+  }
+  const tabs = `<div class="tabs" role="tablist">
+    <button role="tab" type="button" data-tab="original" aria-selected="${buyTab==="original"}">Original</button>
+    ${a.prints?`<button role="tab" type="button" data-tab="print" aria-selected="${buyTab==="print"}">Print</button>`:""}</div>`;
+  let body;
+  if(buyTab==="original"){
+    body = a.status==="sold"
+      ? `<div class="sold">Original sold</div><div class="note" style="color:inherit;opacity:.75">Prints of this work are still available.</div>`
+      : `<div class="price">${inr(a.price)}<small>original, signed, one of one</small></div>
+         <div class="acts"><button class="btn solid" type="button" id="addBtn">Buy the original</button><button class="btn" type="button" id="wallBtn">See it on your wall</button></div>`;
+  } else {
+    const ps = printSizes(a);
+    body = `<div class="sizes" role="radiogroup" aria-label="Print size">${ps.map((p,i)=>`<label><span><input type="radio" name="ps" value="${i}" ${i===printPick?"checked":""}>${p.name} · ${p.w} × ${p.h} cm</span><span>${inr(p.price)}</span></label>`).join("")}</div>
+      <div class="acts"><button class="btn solid" type="button" id="addBtn">Add print to cart</button><button class="btn" type="button" id="wallBtn">See it on your wall</button></div>`;
+  }
+  b.innerHTML = tabs + body;
+}
+$("#buy").addEventListener("click", e => {
+  const t = e.target.closest("[data-tab]"); if(t){ buyTab = t.dataset.tab; renderBuy(); return; }
+  if(e.target.id==="addBtn") addCurrent(buyTab==="original" ? null : printPick);
+  if(e.target.id==="wallBtn") openWall(current, buyTab==="original" ? -1 : printPick);
+});
+$("#buy").addEventListener("change", e => { if(e.target.name==="ps") printPick = +e.target.value; });
+function addCurrent(pi){
+  const a = current;
+  if(pi===null || pi===-1) addToCart({slug:a.slug, type:"original", label:"Original", price:a.price});
+  else { const p = printSizes(a)[pi]; addToCart({slug:a.slug, type:"print", label:`Print, ${p.name.toLowerCase()} ${p.w} × ${p.h} cm`, price:p.price}); }
+}
+function step(d){ const i = ART.findIndex(a => a===current); location.hash = ART[(i + d + ART.length) % ART.length].slug; }
+$("#prevWork").onclick = () => step(-1); $("#nextWork").onclick = () => step(1); $("#allWorks").onclick = () => location.hash = "works";
+$("#workImg").onclick = () => { $("#zoomImg").src = $("#workImg").src; $("#zoom").classList.add("on"); };
+$("#zoom").onclick = () => $("#zoom").classList.remove("on");
+let touchX = null;
+$("#v-work").addEventListener("touchstart", e => touchX = e.touches[0].clientX, {passive:true});
+$("#v-work").addEventListener("touchend", e => { if(touchX===null) return; const dx = e.changedTouches[0].clientX - touchX; if(Math.abs(dx) > 60 && !$("#wall").classList.contains("on")) step(dx < 0 ? 1 : -1); touchX = null; });
+
+/* ---------- cart view ---------- */
+let orderState = null;
+function renderCart(){
+  const v = $("#v-cart");
+  if(orderState){ renderPay(v); return; }
+  if(!cart.length){ v.innerHTML = `<div class="empty"><div class="eyebrow">Cart</div><p>Nothing here yet.</p><a class="btn solid" href="#works">See the works</a></div>`; return; }
+  const sub = cart.reduce((s,c)=>s+c.price,0), maxShow = innerHeight < 700 ? 2 : 4;
+  const rows = cart.slice(0,maxShow).map((c,i)=>{ const a = bySlug[c.slug]; return `<div class="line"><img src="img/${a.slug}-sm.webp" alt=""><div><i>${a.title}</i><div class="meta">${c.label}</div></div>
+    <div class="r">${inr(c.price)}<br><button class="linkish" type="button" data-rm="${i}">Remove</button></div></div>`; }).join("");
+  const more = cart.length > maxShow ? `<div class="note">and ${cart.length-maxShow} more</div>` : "";
+  v.innerHTML = `<div class="cart-list"><h2>Your cart</h2>${rows}${more}
+    <div class="totals"><div><span>Works</span><span>${inr(sub)}</span></div><div><span>Courier, tracked</span><span>${inr(SHIPPING)}</span></div><div class="t"><span>Total</span><span>${inr(sub+SHIPPING)}</span></div></div></div>
+    <div class="cart-form"><h2>Where should it go?</h2>
+    <form id="orderForm">
+      <div class="field"><label for="f-name">Full name</label><input id="f-name" required autocomplete="name"></div>
+      <div class="field"><label for="f-phone">Phone</label><input id="f-phone" required inputmode="tel" pattern="[0-9 +]{10,14}" autocomplete="tel"></div>
+      <div class="field full"><label for="f-email">Email</label><input id="f-email" type="email" required autocomplete="email"></div>
+      <div class="field full"><label for="f-addr">Address</label><input id="f-addr" required autocomplete="street-address"></div>
+      <div class="field"><label for="f-city">City</label><input id="f-city" required autocomplete="address-level2"></div>
+      <div class="field"><label for="f-pin">PIN code</label><input id="f-pin" required inputmode="numeric" pattern="[0-9]{6}" autocomplete="postal-code"></div>
+      <div class="full acts"><button class="btn solid" type="submit">Continue to payment</button></div>
+    </form><div class="note">An original is held for you for 24 hours while you pay.</div></div>`;
+}
+$("#v-cart").addEventListener("click", e => { const r = e.target.closest("[data-rm]"); if(r){ cart.splice(+r.dataset.rm,1); saveCart(); renderCart(); } });
+$("#v-cart").addEventListener("submit", e => {
+  if(e.target.id==="orderForm"){ e.preventDefault();
+    const total = cart.reduce((s,c)=>s+c.price,0) + SHIPPING;
+    orderState = {id:"ART-" + String(1000 + Math.floor(Math.random()*9000)), total, step:"pay"}; renderCart(); }
+  if(e.target.id==="utrForm"){ e.preventDefault(); orderState.step = "done"; cart = []; saveCart(); renderCart(); }
+});
+function renderPay(v){
+  if(orderState.step==="done"){
+    v.innerHTML = `<div class="empty"><div class="eyebrow">Order ${orderState.id}</div><p>Thank you. Jomy will check the payment and confirm by email within a day.</p>
+      <button class="btn solid" type="button" id="doneBtn">Back to the works</button></div>`;
+    $("#doneBtn").onclick = () => { orderState = null; location.hash = "works"; }; return;
+  }
+  v.innerHTML = `<div class="cart-form" style="justify-content:center"><div class="eyebrow">Order ${orderState.id}</div><h2>Pay ${inr(orderState.total)} by UPI</h2>
+    <div class="pay"><div class="qr"><div id="qrBox"></div><div class="veil">Jomy's UPI QR will appear here, with the amount and order number filled in.</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div>Scan with any UPI app: GPay, PhonePe, Paytm or your bank's app. The amount and the order number <b>${orderState.id}</b> are already filled in.</div>
+        <button class="btn" type="button" disabled>Pay in UPI app</button>
+      </div></div>
+    <form id="utrForm" style="grid-template-columns:1fr auto;align-items:end">
+      <div class="field"><label for="f-utr">UPI reference number (12 digits)</label><input id="f-utr" required inputmode="numeric" pattern="[0-9]{12}" placeholder="from your UPI app's receipt"></div>
+      <button class="btn solid" type="submit">I have paid</button>
+    </form>
+    <div class="note">Preview only: no money can be paid here yet.</div></div>`;
+  try{ new QRCode($("#qrBox"), {text:"preview only " + orderState.id, width:180, height:180}); }catch(e){}
+}
+
+/* ---------- wall try-on ---------- */
+const W = {art:null, artImg:null, room:null, roomImg:null, sizeIdx:-1, frame:"none", pos:null, own:null, ownScale:null, handles:null, drag:null};
+function wallSizes(a){ const s = a.prints ? printSizes(a).map(p=>({label:`${p.name} ${p.w} × ${p.h}`, w:p.w, h:p.h, i:PRINT_LONG.indexOf(PRINT_LONG.find(x=>x.name===p.name))})) : [];
+  return (a.status==="available" ? [{label:`Original ${a.cm[0]} × ${a.cm[1]}`, w:a.cm[0], h:a.cm[1], i:-1}] : []).concat(s); }
+async function openWall(a, sizeIdx){
+  W.art = a; W.sizeIdx = sizeIdx; W.artImg = await loadImg(`img/${a.slug}.webp`);
+  if(sizeIdx===-1 && a.status!=="available") W.sizeIdx = 1;
+  $("#wallTitle").innerHTML = `<i>${a.title}</i> on a wall`;
+  $("#wall").classList.add("on");
+  renderRoomPick(); renderSizePick(); renderFramePick();
+  if(!W.room) await pickRoom(ROOMS[0].id); else drawWall();
+}
+function renderRoomPick(){
+  $("#roomPick").innerHTML = ROOMS.map(r => `<button type="button" data-room="${r.id}" aria-pressed="${W.room===r.id}" aria-label="${r.label}"><img src="${r.src}" alt=""></button>`).join("")
+    + `<button type="button" class="own" data-room="own" aria-pressed="${W.room==="own"}">${W.own ? "Your wall" : "Use a photo of your wall"}</button>`;
+}
+function renderSizePick(){ const s = wallSizes(W.art); if(!s.some(x=>x.i===W.sizeIdx)) W.sizeIdx = s[0]?.i ?? 1;
+  $("#sizePick").innerHTML = s.map(x => `<button type="button" data-size="${x.i}" aria-pressed="${x.i===W.sizeIdx}">${x.label} cm</button>`).join(""); }
+function renderFramePick(){ $("#framePick").innerHTML = Object.entries(FRAMES).map(([k,f]) => `<button type="button" data-frame="${k}" aria-pressed="${W.frame===k}">${f.label}</button>`).join(""); }
+async function pickRoom(id){
+  if(id==="own" && !W.own){ $("#wallFile").click(); return; }
+  W.room = id; W.pos = null;
+  W.roomImg = id==="own" ? W.own : await loadImg(ROOMS.find(r=>r.id===id).src);
+  $("#scaleBox").hidden = id!=="own";
+  $("#wallHint").textContent = id==="own" ? "Drag the work to move it. Set the scale below so its size is true." : "Drag the work to move it. Its size is to scale with the furniture.";
+  renderRoomPick(); drawWall();
+}
+$("#wallFile").addEventListener("change", e => {
+  const f = e.target.files[0]; if(!f) return;
+  const url = URL.createObjectURL(f), i = new Image();
+  i.onload = () => { W.own = i; W.ownScale = null; W.handles = [[i.width*.35, i.height*.75],[i.width*.65, i.height*.75]]; pickRoom("own"); };
+  i.src = url; e.target.value = "";
+});
+$("#roomPick").addEventListener("click", e => { const b = e.target.closest("[data-room]"); if(!b) return;
+  if(b.dataset.room==="own" && W.room==="own"){ $("#wallFile").click(); return; } pickRoom(b.dataset.room); });
+$("#sizePick").addEventListener("click", e => { const b = e.target.closest("[data-size]"); if(!b) return; W.sizeIdx = +b.dataset.size; renderSizePick(); drawWall(); });
+$("#framePick").addEventListener("click", e => { const b = e.target.closest("[data-frame]"); if(!b) return; W.frame = b.dataset.frame; renderFramePick(); drawWall(); });
+$("#scaleCm").addEventListener("input", drawWall);
+$("#wallClose").onclick = () => $("#wall").classList.remove("on");
+$("#wallAdd").onclick = () => { $("#wall").classList.remove("on"); current = W.art; addCurrent(W.sizeIdx===-1 ? null : W.sizeIdx); };
+$("#wallSave").onclick = () => { const c = $("#wallCanvas"); try{ c.toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = `${W.art.slug}-on-wall.png`; a.click(); }); }catch(e){} };
+
+function sceneGeom(){
+  const c = $("#wallCanvas"), r = c.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+  const img = W.roomImg; const s = Math.min(r.width*dpr/img.width, r.height*dpr/img.height);
+  const ox = (r.width*dpr - img.width*s)/2, oy = (r.height*dpr - img.height*s)/2;
+  let pxPerCmImg, anchor;
+  if(W.room==="own"){
+    const [[x1,y1],[x2,y2]] = W.handles, cm = Math.max(1, +$("#scaleCm").value || 90);
+    pxPerCmImg = Math.hypot(x2-x1, y2-y1)/cm; anchor = [img.width/2, img.height*.42];
+  } else {
+    const R = ROOMS.find(x=>x.id===W.room); pxPerCmImg = (R.px[1]-R.px[0])/R.cm; anchor = R.anchor;
+  }
+  return {c, r, dpr, s, ox, oy, pxPerCmImg, anchor};
+}
+function drawWall(){
+  if(!$("#wall").classList.contains("on") || !W.roomImg) return;
+  const g = sceneGeom(), {c, r, dpr, s, ox, oy} = g, ctx = c.getContext("2d");
+  c.width = r.width*dpr; c.height = r.height*dpr;
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--panel") || "#eee"; ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(W.roomImg, ox, oy, W.roomImg.width*s, W.roomImg.height*s);
+  const size = wallSizes(W.art).find(x=>x.i===W.sizeIdx);
+  const ppc = g.pxPerCmImg*s, w = size.w*ppc, h = size.h*ppc;
+  if(!W.pos) W.pos = [g.anchor[0], g.anchor[1]];
+  const cx = ox + W.pos[0]*s, cy = oy + W.pos[1]*s;
+  W.box = drawFramed(ctx, W.artImg, cx - w/2, cy - h/2, w, h, W.frame, ppc);
+  if(W.room==="own"){
+    const [[x1,y1],[x2,y2]] = W.handles.map(([x,y]) => [ox + x*s, oy + y*s]);
+    ctx.save(); ctx.strokeStyle = "#ffd24a"; ctx.lineWidth = 2*dpr; ctx.setLineDash([8*dpr,6*dpr]);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.setLineDash([]);
+    for(const [x,y] of [[x1,y1],[x2,y2]]){ ctx.beginPath(); ctx.arc(x,y,9*dpr,0,7); ctx.fillStyle = "#ffd24a"; ctx.fill(); ctx.lineWidth = 2*dpr; ctx.strokeStyle = "#1c1916"; ctx.stroke(); }
+    ctx.restore();
+  }
+}
+function toImg(e){ const g = sceneGeom(), rr = g.c.getBoundingClientRect(); return [((e.clientX-rr.left)*g.dpr - g.ox)/g.s, ((e.clientY-rr.top)*g.dpr - g.oy)/g.s, g]; }
+$("#wallCanvas").addEventListener("pointerdown", e => {
+  const [x, y, g] = toImg(e); const hit = 18/g.s*g.dpr;
+  if(W.room==="own"){ const k = W.handles.findIndex(([hx,hy]) => Math.hypot(hx-x, hy-y) < hit); if(k>=0){ W.drag = {handle:k}; e.target.setPointerCapture(e.pointerId); return; } }
+  W.drag = {dx: x - W.pos[0], dy: y - W.pos[1]}; e.target.setPointerCapture(e.pointerId); e.target.style.cursor = "grabbing";
+});
+$("#wallCanvas").addEventListener("pointermove", e => { if(!W.drag) return; const [x, y] = toImg(e);
+  if(W.drag.handle!==undefined) W.handles[W.drag.handle] = [x, y]; else W.pos = [x - W.drag.dx, y - W.drag.dy]; drawWall(); });
+addEventListener("pointerup", () => { W.drag = null; $("#wallCanvas").style.cursor = "grab"; });
+
+/* ---------- router ---------- */
+const VIEWS = ["home","works","about","cart"];
+function route(){
+  const h = (location.hash || "#home").slice(1);
+  const name = bySlug[h] ? "work" : VIEWS.includes(h) ? h : "home";
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + name));
+  document.querySelectorAll("[data-nav]").forEach(a => { if(a.dataset.nav === name || (name==="work" && a.dataset.nav==="works")) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  if(name !== "work"){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; }
+  if(name==="home"){ document.documentElement.style.setProperty("--bar-ink", "#1C1916"); drawHome(); }
+  if(name==="works") renderWorks();
+  if(name==="work") renderWork(h);
+  if(name==="cart") renderCart();
+  if(name==="about"){ $("#studioImg").src = "img/studio.webp"; $("#packImg").src = "img/packing.webp"; }
+}
+addEventListener("hashchange", route);
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { route(); drawWall(); }, 120); });
+addEventListener("keydown", e => {
+  if(e.key==="Escape"){ $("#zoom").classList.remove("on"); $("#wall").classList.remove("on"); }
+  if(current && $("#v-work").classList.contains("on") && !$("#wall").classList.contains("on")){ if(e.key==="ArrowRight") step(1); if(e.key==="ArrowLeft") step(-1); }
+});
+saveCart(); route();
+</script>

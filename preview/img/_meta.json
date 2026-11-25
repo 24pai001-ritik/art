@@ -1,0 +1,47 @@
+{
+ "grief": {
+  "w": 1785,
+  "h": 1641,
+  "edge": "#232026"
+ },
+ "vacant": {
+  "w": 1202,
+  "h": 1108,
+  "edge": "#2a201f"
+ },
+ "old-man": {
+  "w": 948,
+  "h": 1319,
+  "edge": "#563b33"
+ },
+ "paper-weight": {
+  "w": 1013,
+  "h": 1189,
+  "edge": "#b68065"
+ },
+ "roses": {
+  "w": 1905,
+  "h": 2189,
+  "edge": "#bdb7bc"
+ },
+ "hibiscus": {
+  "w": 1702,
+  "h": 1540,
+  "edge": "#d1d5ce"
+ },
+ "acceptance": {
+  "w": 1715,
+  "h": 2286,
+  "edge": "#d1cbc3"
+ },
+ "bargue-charcoal": {
+  "w": 1959,
+  "h": 2539,
+  "edge": "#999893"
+ },
+ "bargue-graphite": {
+  "w": 1394,
+  "h": 1716,
+  "edge": "#c8c9bf"
+ }
+}
