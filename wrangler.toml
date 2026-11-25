@@ -1,12 +1,7 @@
-name = "artist-portfolio"
+# Live site today: the static preview (look D, Salon) served as Worker static assets.
+# The full Astro + D1 + R2 config for later is in wrangler.astro-later.toml.
+name = "art"
 compatibility_date = "2026-11-01"
-pages_build_output_dir = "./dist"
 
-[[d1_databases]]
-binding = "DB"
-database_name = "artist-db"
-database_id = "REPLACE_AFTER_wrangler_d1_create"
-
-[[r2_buckets]]
-binding = "IMAGES"
-bucket_name = "artist-images"
+[assets]
+directory = "./preview"
