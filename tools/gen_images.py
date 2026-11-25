@@ -46,6 +46,16 @@ TEXTURES = {
     "torn_edge": ("A sheet of white cold-press watercolour paper with a torn deckled edge lying on a pure black background, the torn edge runs horizontally across the middle", "16:9"),
 }
 
+FRAME = (" Real product photograph, shot perfectly straight-on and square to the camera, the frame fills the whole picture edge to edge with no wall or background visible,"
+         " the empty opening in the middle is flat plain pure white card, even soft light, no glass reflection, no text, no logos.")
+FRAMES = {
+    "frame_gilt": ("An empty ornate antique gilded picture frame with carved acanthus-leaf moulding and a worn burnished gold finish, about 10 cm wide." + FRAME, "1:1"),
+    "frame_ripple": ("An empty black wooden picture frame with a rippled (wave) moulding profile and a thin antique-gold inner lip, Dutch 17th-century style, about 6 cm wide." + FRAME, "1:1"),
+    "frame_cassetta": ("An empty cassetta-style picture frame: a wide flat dark walnut panel with narrow carved gilded inner and outer edges, about 8 cm wide." + FRAME, "1:1"),
+    "studio_wall": ("A painter's studio in the evening: a bare deep warm charcoal-brown painted plaster wall lit by one warm spotlight from the upper left, a soft pool of light in the centre and deep shadow at the edges,"
+                    " the edge of an old dark wooden floor at the very bottom, an empty wooden easel half in shadow at the far right edge. Nothing hanging on the wall. Real photograph, no people, no text.", "16:9"),
+}
+
 def key_from(env_file):
     for line in pathlib.Path(env_file).read_text(encoding="utf-8").splitlines():
         line = line.strip()
@@ -75,6 +85,10 @@ def main():
         reqs = [{"metadata": {"key": k}, "request": {"contents": [{"parts": [{"text": p + COMMON}]}],
                  "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": ar}}}}
                 for k, (p, ar) in PROMPTS.items() if not only or k in only]
+        if "frames" in sys.argv:
+            reqs = [{"metadata": {"key": k}, "request": {"contents": [{"parts": [{"text": p}]}],
+                     "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": ar}}}}
+                    for k, (p, ar) in FRAMES.items()]
         if "textures" in sys.argv:
             reqs = [{"metadata": {"key": k}, "request": {"contents": [{"parts": [{"text": p + TEX}]}],
                      "generationConfig": {"responseModalities": ["IMAGE"], "imageConfig": {"aspectRatio": ar}}}}

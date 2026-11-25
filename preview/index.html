@@ -3,7 +3,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
 <style>
 /* Layout: one viewing room at a time. Each work gets a wall tinted from its own edges, with a museum label (tombstone) beside it. Nothing scrolls; you walk from room to room. */
 :root{
@@ -322,6 +322,78 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 }
 @media (max-height:620px){ :root[data-dir] .detail{display:none} }
 
+/* D. Salon (learned from sarahmargaretgibson.com): charcoal studio wall, works hung in photographed frames,
+   centred spaced-caps wordmark and nav, one ochre accent for "you are here" and the main button */
+.salon{display:none}
+.how{margin:0;padding-left:20px;font-size:14px;line-height:1.6;max-width:46ch}
+.trust{margin-top:-2px}
+@media (max-height:620px){ .trust,.cue{display:none} }
+:root[data-dir="d"] .tile .cap{font-size:13px}
+:root[data-dir="d"] .tile .cap i{font-size:17px;color:var(--ink)}
+:root[data-dir="d"] .tile .cap span:last-child{color:#D2C2AB}
+:root[data-dir="d"] .steps span{color:var(--ink);opacity:.82;font-size:14px}
+:root[data-dir="d"] .contact{font-size:14px}
+:root[data-dir="d"] .empty{align-items:center;text-align:center}
+:root[data-dir="d"] .how{text-align:left;color:var(--ink);opacity:.9}
+:root[data-dir="d"] .trust{color:var(--ink);opacity:.78;font-size:12px}
+
+:root[data-dir="d"]{--ground:#1C1917;--tex:linear-gradient(rgba(22,19,17,.6),rgba(22,19,17,.6)),url(img/tex/plaster.webp);--tex-blend:multiply;--ink:#F2E6D8;--muted:#BBAA95;--line:rgba(242,230,216,.2);--panel:transparent;
+  --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;--text:"Newsreader",Georgia,serif;--ochre:#D9963F;--bar:clamp(74px,12vh,98px);color-scheme:dark}
+:root[data-dir="d"] .bar{text-shadow:0 1px 10px rgba(0,0,0,.7);flex-direction:column;justify-content:center;gap:clamp(4px,1vh,10px);text-align:center}
+:root[data-dir="d"] .mark{font-weight:600;text-transform:uppercase;letter-spacing:.24em;font-size:clamp(17px,2.1vw,26px);margin-right:-.24em}
+:root[data-dir="d"] .mark i{font-style:normal;font-weight:600}
+:root[data-dir="d"] .nav{font-family:var(--display);font-weight:600;font-size:clamp(12px,1.05vw,14px);letter-spacing:.24em;gap:clamp(18px,3.4vw,44px)}
+:root[data-dir="d"] .nav a{border:0;padding:2px 0}
+:root[data-dir="d"] .nav a[aria-current="page"]{color:var(--ochre)}
+:root[data-dir="d"] .btn{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.22em}
+:root[data-dir="d"] .btn.solid{--b-ink:var(--ochre);--b-bg:#1C1917;background:var(--ochre);color:#1C1917;border-color:var(--ochre)}
+:root[data-dir="d"] #v-work .btn.solid{--b-ink:var(--ochre);--b-bg:#1C1917}
+/* frames: real photographed mouldings, nine-sliced round each work; drawings and watercolours also get a cream mat */
+:root[data-dir="d"] .fr{box-sizing:border-box;border-style:solid;border-color:#2a2018;border-width:var(--fw);border-image-slice:21%;border-image-repeat:stretch;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.55)) drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+:root[data-dir="d"] .f-gilt{border-image-source:url(img/tex/frame_gilt.webp);border-image-slice:21.3%}
+:root[data-dir="d"] .f-rip{border-image-source:url(img/tex/frame_ripple.webp);border-image-slice:18.8% 17.7% 20.2% 17.5%}
+:root[data-dir="d"] .f-cas{border-image-source:url(img/tex/frame_cassetta.webp);border-image-slice:20.5%}
+:root[data-dir="d"] .f-rip,:root[data-dir="d"] .f-cas{padding:calc(var(--fw) * .9);background:#EDE5D6}
+:root[data-dir="d"] .home-art,:root[data-dir="d"] .home-tag,:root[data-dir="d"] .home-paint,:root[data-dir="d"] .home-copy h1{display:none}
+:root[data-dir="d"] #v-home{top:calc(-1 * var(--bar));background:#1C1917 url(img/tex/studio_wall.webp) center/cover no-repeat}
+:root[data-dir="d"] .salon{display:flex;position:absolute;left:0;right:0;top:calc(var(--bar) + 2vh);bottom:clamp(96px,16vh,150px);align-items:center;justify-content:center;gap:clamp(14px,2.6vw,40px);z-index:2}
+:root[data-dir="d"] .sc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,3.4vh,34px)}
+:root[data-dir="d"] .salon a{display:block;line-height:0;transition:transform .35s}
+:root[data-dir="d"] .salon a:hover{transform:translateY(-4px)}
+:root[data-dir="d"] .salon img{--fw:clamp(11px,2.3vh,22px);height:min(22vh,14vw);width:auto;display:block}
+:root[data-dir="d"] .salon .big img{--fw:clamp(20px,4.4vh,42px);height:min(48vh,31vw)}
+:root[data-dir="d"] .home-copy{left:0;right:0;max-width:none;justify-content:center;flex-direction:column;align-items:center;text-align:center;gap:12px;bottom:clamp(16px,4vh,40px)}
+:root[data-dir="d"] .home-copy p{font-family:var(--display);font-style:italic;font-size:clamp(16px,1.5vw,19px);margin:0;max-width:52ch;color:var(--ink)}
+:root[data-dir="d"] .home-copy .acts{justify-content:center}
+:root[data-dir="d"] .home-copy .btn{color:var(--ink);background:rgba(20,16,13,.45);border-color:rgba(242,230,216,.7)}
+:root[data-dir="d"] .home-copy .btn.solid{background:var(--ochre);color:#1C1917;border-color:var(--ochre)}
+/* inner pages open with a centred spaced-caps title, as hers do */
+:root[data-dir="d"] .works-head{flex-direction:column;align-items:center}
+:root[data-dir="d"] .works-head h2,:root[data-dir="d"] .about-text h2,:root[data-dir="d"] .cart-list h2,:root[data-dir="d"] .cart-form h2{font-weight:600;text-transform:uppercase;letter-spacing:.2em;font-size:clamp(20px,2.4vw,30px)}
+:root[data-dir="d"] .chip{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:12px}
+:root[data-dir="d"] .chip[aria-pressed="true"]{background:none;color:var(--ochre);border-color:var(--ochre)}
+:root[data-dir="d"] .tile .frame{padding:clamp(4px,1vw,12px)}
+:root[data-dir="d"] .tile img{--fw:clamp(8px,1.6vh,16px);box-shadow:none}
+:root[data-dir="d"] .hang img{--fw:clamp(18px,4.2vh,40px);box-shadow:none;max-width:92%;max-height:92%}
+:root[data-dir="d"] .tomb{border-left-color:rgba(217,150,63,.6)}
+:root[data-dir="d"] .tomb h2{font-weight:500}
+:root[data-dir="d"] .price{font-weight:500}
+@media (max-width:640px){
+  :root[data-dir="d"] .sc-out{display:none}
+  :root[data-dir="d"] .salon{flex-direction:column;gap:clamp(12px,2.4vh,22px);bottom:clamp(140px,24vh,190px);top:calc(var(--bar) + 1vh)}
+  :root[data-dir="d"] .salon .sc{flex-direction:row;gap:7vw}
+  :root[data-dir="d"] .salon .sc:has(.big){order:-1}
+  :root[data-dir="d"] .salon img{height:min(15vh,34vw);--fw:10px}
+  :root[data-dir="d"] .salon .big img{height:min(31vh,70vw);--fw:18px}
+  :root[data-dir="d"] .home-copy{padding-inline:16px}
+  :root[data-dir="d"] .home-copy p{font-size:16px}
+  :root[data-dir="d"] .mark{letter-spacing:.18em;margin-right:-.18em;font-size:17px}
+  :root[data-dir="d"] .nav{letter-spacing:.18em;gap:18px}
+  :root[data-dir="d"] .dirpick{left:8px;transform:none;top:calc(6px + env(safe-area-inset-top,0px))}
+}
+@media (min-width:641px){ :root[data-dir="d"] .dirpick{left:12px;transform:none} }
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -340,7 +412,14 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
       <canvas id="homeCanvas"></canvas>
       <i class="paint home-paint hp1 s-swash" aria-hidden="true"></i><i class="paint home-paint hp2 s-dab" aria-hidden="true"></i><i class="paint home-paint hp3 s-dry" aria-hidden="true"></i>
       <a href="#grief" aria-label="Grief, see the work"><img class="home-art" src="img/grief.webp" alt="Grief, oil on linen, 2026"></a>
-      <div class="home-tag"><i>Grief</i>, 2026<br>Oil on linen, 33 × 30 cm</div>
+      <div class="home-tag"><i>Grief</i>, 2026<br>Oil on linen, 21 × 19 cm</div>
+      <div class="salon" aria-label="Works hung on the studio wall">
+        <div class="sc sc-out"><a href="#hibiscus"><img class="fr f-cas" src="img/hibiscus-sm.webp" alt="Live Sketch of Hibiscus, watercolour"></a></div>
+        <div class="sc"><a href="#vacant"><img class="fr f-gilt" src="img/vacant-sm.webp" alt="Vacant, oil on linen"></a><a href="#acceptance"><img class="fr f-rip" src="img/acceptance-sm.webp" alt="Acceptance, coloured pencils"></a></div>
+        <div class="sc"><a href="#grief" class="big"><img class="fr f-gilt" src="img/grief.webp" alt="Grief, oil on linen"></a></div>
+        <div class="sc"><a href="#old-man"><img class="fr f-gilt" src="img/old-man-sm.webp" alt="Old Man, oil on paper"></a><a href="#roses"><img class="fr f-cas" src="img/roses-sm.webp" alt="Live Sketch of Roses, watercolour"></a></div>
+        <div class="sc sc-out"><a href="#paper-weight"><img class="fr f-rip" src="img/paper-weight-sm.webp" alt="Paper Weight, oil on paper"></a></div>
+      </div>
       <div class="home-label" id="homeLabel" hidden></div>
       <div class="home-copy">
         <div>
@@ -437,26 +516,26 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
   </div>
 </div>
 
-<div class="dirpick" id="dirpick" aria-label="Choose a look"><span class="dp-x">Look</span><button type="button" data-d="a">A<span class="dp-x"> Linen</span></button><button type="button" data-d="b">B<span class="dp-x"> Paper</span></button><button type="button" data-d="c">C<span class="dp-x"> Studio</span></button><span class="dp-x">Sample prices</span></div>
+<div class="dirpick" id="dirpick" aria-label="Choose a look"><span class="dp-x">Look</span><button type="button" data-d="a">A<span class="dp-x"> Linen</span></button><button type="button" data-d="b">B<span class="dp-x"> Paper</span></button><button type="button" data-d="c">C<span class="dp-x"> Studio</span></button><button type="button" data-d="d">D<span class="dp-x"> Salon</span></button><span class="dp-x">Sample prices</span></div>
 <i class="paint wipe" id="wipe" aria-hidden="true"></i>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 /* ---------- data (sizes and prices are placeholders until Jomy confirms) ---------- */
 const ART = [
-  {slug:"grief", title:"Grief", medium:"Oil on linen", year:2026, kind:"Oil", cm:[33,30], price:24000, status:"available", prints:true},
-  {slug:"vacant", title:"Vacant", medium:"Oil on linen", year:2026, kind:"Oil", cm:[30,28], price:22000, status:"available", prints:true},
-  {slug:"old-man", title:"Old Man", medium:"Oil on paper", year:2026, kind:"Oil", cm:[20,28], price:14000, status:"available", prints:true},
-  {slug:"paper-weight", title:"Paper Weight", medium:"Oil on paper", year:2025, kind:"Oil", cm:[21,25], price:9000, status:"sold", prints:true},
-  {slug:"roses", title:"Live Sketch of Roses", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[26,30], price:7500, status:"available", prints:true},
-  {slug:"hibiscus", title:"Live Sketch of Hibiscus", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[30,27], price:7000, status:"available", prints:true},
-  {slug:"acceptance", title:"Acceptance", medium:"Coloured pencils on paper", year:2026, kind:"Drawing", cm:[21,28], price:8500, status:"available", prints:true},
-  {slug:"bargue-charcoal", title:"Charles Bargue Study", medium:"Charcoal on paper", year:2026, kind:"Drawing", cm:[42,55], price:null, status:"study", prints:false},
-  {slug:"bargue-graphite", title:"Charles Bargue Study", medium:"Graphite on paper", year:2025, kind:"Drawing", cm:[21,26], price:null, status:"study", prints:false},
+  {slug:"grief", title:"Grief", medium:"Oil on linen", year:2026, kind:"Oil", cm:[21,19], price:24000, status:"available", prints:true},
+  {slug:"vacant", title:"Vacant", medium:"Oil on linen", year:2026, kind:"Oil", cm:[21,19.5], price:22000, status:"available", prints:true},
+  {slug:"old-man", title:"Old Man", medium:"Oil on paper", year:2026, kind:"Oil", cm:[15,21], price:14000, status:"available", prints:true},
+  {slug:"paper-weight", title:"Paper Weight", medium:"Oil on paper", year:2025, kind:"Oil", cm:[17.5,21], price:9000, status:"sold", prints:true},
+  {slug:"roses", title:"Live Sketch of Roses", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[18,21], price:7500, status:"available", prints:true},
+  {slug:"hibiscus", title:"Live Sketch of Hibiscus", medium:"Watercolour on paper", year:2025, kind:"Watercolour", cm:[21,19], price:7000, status:"available", prints:true},
+  {slug:"acceptance", title:"Acceptance", medium:"Coloured pencils on paper", year:2026, kind:"Drawing", cm:[16,21], price:8500, status:"available", prints:true},
+  {slug:"bargue-charcoal", title:"Charles Bargue Study", medium:"Charcoal on paper", year:2026, kind:"Drawing", cm:[16,21], price:null, status:"study", prints:false},
+  {slug:"bargue-graphite", title:"Charles Bargue Study", medium:"Graphite on paper", year:2025, kind:"Drawing", cm:[17,21], price:null, status:"study", prints:false},
 ];
 /* wall colour sampled from each work's own edges (preview/img/_meta.json) */
 const EDGE = {"grief":"#232026","vacant":"#2a201f","old-man":"#563b33","paper-weight":"#b68065","roses":"#bdb7bc","hibiscus":"#d1d5ce","acceptance":"#d1cbc3","bargue-charcoal":"#999893","bargue-graphite":"#c8c9bf"};
-const PRINT_LONG = [{name:"Small", long:30, price:1400},{name:"Medium", long:45, price:2400},{name:"Large", long:60, price:3800}];
+const PRINT_LONG = [{name:"A5, true size", long:21, price:900},{name:"A4", long:30, price:1400},{name:"A3", long:42, price:2400}];
 const SHIPPING = 150;
 /* sample rooms: furniture of known width gives pixels per cm (measured on each photo) */
 const ROOMS = [
@@ -484,6 +563,7 @@ function wallFor(slug){
   const dark = lum(w) < .25;
   return {wall: rgbHex(w), ink: dark ? "#EFE9DF" : "#1C1916", line: dark ? "rgba(239,233,223,.25)" : "rgba(28,25,22,.22)"};
 }
+const frameOf = a => "fr " + ({Oil:"f-gilt", Watercolour:"f-cas"}[a.kind] || "f-rip");
 function printSizes(a){ const [w,h] = a.cm, m = Math.max(w,h); return PRINT_LONG.map(p => ({...p, w: Math.round(w/m*p.long), h: Math.round(h/m*p.long)})); }
 function store(k, v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)||"null"); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
 
@@ -558,8 +638,8 @@ function renderWorks(){
   const wide = innerWidth > 1000, phone = innerWidth <= 640;
   const cols = phone ? 3 : wide ? Math.min(5, Math.max(3, Math.ceil(list.length/2))) : 3;
   g.style.setProperty("--cols", cols);
-  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img src="img/${a.slug}-sm.webp" alt="${a.title}, ${a.medium}" loading="lazy"></div>
-    <div class="cap"><i>${a.title}</i><span>${a.status==="sold"?"Sold · prints":a.status==="study"?"Study":inr(a.price)}</span></div></a>`).join("");
+  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" src="img/${a.slug}-sm.webp" alt="${a.title}, ${a.medium}" loading="lazy"></div>
+    <div class="cap"><i>${a.status==="study" ? a.title.replace("Charles ","") + ", " + a.medium.split(" ")[0].toLowerCase() : a.title}</i><span>${a.status==="sold"?"Sold · prints left":a.status==="study"?"Not for sale":inr(a.price)}</span></div></a>`).join("");
 }
 $("#filters").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if(!b) return; filter = b.dataset.k; renderWorks(); });
 
@@ -570,13 +650,13 @@ function renderWork(slug){
   v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
   if(document.documentElement.dataset.dir){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; } else { document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall; }
   $("#room").classList.remove("reading");
-  const img = $("#workImg"); img.src = `img/${slug}.webp`;
+  const img = $("#workImg"); img.src = `img/${slug}.webp`; img.className = frameOf(ART.find(x=>x.slug===slug)||{});
   const HAS_DETAIL = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"];
   $("#workDetailBox").style.visibility = HAS_DETAIL.includes(slug) ? "" : "hidden";
   if(HAS_DETAIL.includes(slug)) $("#workDetail").src = `img/${slug}-detail.webp`;
   v.style.setProperty("--edge", EDGE[slug]); img.alt = `${a.title}, ${a.medium}, ${a.year}`;
   $("#workTitle").textContent = a.title;
-  $("#workFacts").innerHTML = `${a.year}<br>${a.medium}<br>${a.cm[0]} × ${a.cm[1]} cm`;
+  $("#workFacts").innerHTML = `${a.year}<br>${a.medium}<br>${a.cm[0]} × ${a.cm[1]} cm <span class="cue">· real size about A5, a notebook page</span>`;
   if(a.status!=="available") buyTab = "print"; else if(!a.prints) buyTab = "original";
   renderBuy();
 }
@@ -599,7 +679,7 @@ function renderBuy(){
     body = `<div class="sizes" role="radiogroup" aria-label="Print size">${ps.map((p,i)=>`<label><span><input type="radio" name="ps" value="${i}" ${i===printPick?"checked":""}>${p.name} · ${p.w} × ${p.h} cm</span><span>${inr(p.price)}</span></label>`).join("")}</div>
       <div class="acts"><button class="btn solid" type="button" id="addBtn">Add print to cart</button><button class="btn" type="button" id="wallBtn">See it on your wall</button></div>`;
   }
-  b.innerHTML = tabs + body;
+  b.innerHTML = tabs + body + `<div class="note trust">Pay by UPI after you order. Sent by tracked courier in India, ${inr(SHIPPING)} shipping.</div>`;
 }
 $("#buy").addEventListener("click", e => {
   const t = e.target.closest("[data-tab]"); if(t){ buyTab = t.dataset.tab; renderBuy(); return; }
@@ -610,7 +690,7 @@ $("#buy").addEventListener("change", e => { if(e.target.name==="ps") printPick =
 function addCurrent(pi){
   const a = current;
   if(pi===null || pi===-1) addToCart({slug:a.slug, type:"original", label:"Original", price:a.price});
-  else { const p = printSizes(a)[pi]; addToCart({slug:a.slug, type:"print", label:`Print, ${p.name.toLowerCase()} ${p.w} × ${p.h} cm`, price:p.price}); }
+  else { const p = printSizes(a)[pi]; addToCart({slug:a.slug, type:"print", label:`Print, ${p.name}, ${p.w} × ${p.h} cm`, price:p.price}); }
 }
 function step(d){ const i = ART.findIndex(a => a===current); location.hash = ART[(i + d + ART.length) % ART.length].slug; }
 $("#prevWork").onclick = () => step(-1); $("#nextWork").onclick = () => step(1); $("#allWorks").onclick = () => location.hash = "works";
@@ -625,7 +705,7 @@ let orderState = null;
 function renderCart(){
   const v = $("#v-cart");
   if(orderState){ renderPay(v); return; }
-  if(!cart.length){ v.innerHTML = `<div class="empty"><div class="eyebrow">Cart</div><p>Nothing here yet.</p><a class="btn solid" href="#works">See the works</a></div>`; return; }
+  if(!cart.length){ v.innerHTML = `<div class="empty"><div class="eyebrow">Cart</div><p>Nothing here yet.</p><ol class="how"><li>Pick an original or a print.</li><li>Pay by UPI with the QR made for your order.</li><li>Jomy checks the payment, then packs and sends it by tracked courier.</li></ol><a class="btn solid" href="#works">See the works</a></div>`; return; }
   const sub = cart.reduce((s,c)=>s+c.price,0), maxShow = innerHeight < 700 ? 2 : 4;
   const rows = cart.slice(0,maxShow).map((c,i)=>{ const a = bySlug[c.slug]; return `<div class="line"><img src="img/${a.slug}-sm.webp" alt=""><div><i>${a.title}</i><div class="meta">${c.label}</div></div>
     <div class="r">${inr(c.price)}<br><button class="linkish" type="button" data-rm="${i}">Remove</button></div></div>`; }).join("");
@@ -768,7 +848,7 @@ function route(){
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + name));
   document.querySelectorAll("[data-nav]").forEach(a => { if(a.dataset.nav === name || (name==="work" && a.dataset.nav==="works")) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
   if(name !== "work"){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; }
-  if(name==="home"){ document.documentElement.style.setProperty("--bar-ink", DIR==="c" ? "#EFE6D6" : "#1C1916"); drawHome(); }
+  if(name==="home"){ document.documentElement.style.setProperty("--bar-ink", (DIR==="c"||DIR==="d") ? "#F2E6D8" : "#1C1916"); drawHome(); }
   if(name==="works") renderWorks();
   if(name==="work"){
     if(DIR==="c" && lastWork && lastWork!==h && !matchMedia("(prefers-reduced-motion: reduce)").matches){ const w = $("#wipe"); w.classList.remove("go"); void w.offsetWidth; w.classList.add("go"); setTimeout(() => renderWork(h), 330); }
