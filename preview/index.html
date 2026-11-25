@@ -326,6 +326,28 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 /* D. Salon (learned from sarahmargaretgibson.com): charcoal studio wall, works hung in photographed frames,
    centred spaced-caps wordmark and nav, one ochre accent for "you are here" and the main button */
 .salon{display:none}
+.closeups{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:clamp(12px,3vh,30px) clamp(12px,2.4vw,30px);padding:clamp(6px,2vh,18px)}
+.closeups a{min-height:0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.about-pic .closeups img{flex:none;width:auto;height:calc(100% - 30px);max-width:100%;aspect-ratio:1/1;object-fit:cover;--fw:clamp(9px,1.8vh,16px)}
+.closeups span{font-family:var(--display);font-style:italic;font-size:16px;line-height:1}
+.cv{margin:0;display:grid;gap:7px;font-size:14px;line-height:1.4}
+.cv div{display:grid;grid-template-columns:6.5em minmax(0,1fr);gap:12px}
+.cv dt{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.cv dd{margin:0}
+:root[data-dir="d"] .cv dt{color:var(--ochre)}
+:root[data-dir="d"] .about-text p{font-size:16px;line-height:1.6}
+:root[data-dir="d"] .about-pic .note{text-align:center;font-family:var(--display);font-style:italic;font-size:14px;color:var(--muted)}
+@media (max-width:640px){
+  .closeups{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:minmax(0,1fr);padding:4px 0;gap:8px}
+  .closeups span{display:none}
+  .about-pic .closeups img{height:auto;width:100%;--fw:7px}
+  .about-pic .note{display:none}
+  #v-about .steps{display:none}
+  #v-about .about-pic{flex:none}
+  #v-about{justify-content:center}
+  :root[data-dir="d"] .about-text p{font-size:15px;line-height:1.5}
+}
+@media (max-height:620px){ #v-about .steps{display:none} }
 .how{margin:0;padding-left:20px;font-size:14px;line-height:1.6;max-width:46ch}
 .trust{margin-top:-2px}
 @media (max-height:620px){ .trust,.cue{display:none} }
@@ -467,21 +489,28 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 
     <section class="view" id="v-about" aria-label="About">
       <div class="about-pic">
-        <img id="studioImg" alt="A painting table by a window, with a palette of earthy oil colours and brushes in a jar">
-        <div class="note">Studio picture is a stand-in until Jomy sends her own.</div>
+        <div class="closeups">
+          <a href="#grief"><img class="fr f-gilt" src="img/grief-detail.webp" alt="Grief, the brushwork close up"><span>Grief</span></a>
+          <a href="#vacant"><img class="fr f-gilt" src="img/vacant-detail.webp" alt="Vacant, the brushwork close up"><span>Vacant</span></a>
+          <a href="#old-man"><img class="fr f-gilt" src="img/old-man-detail.webp" alt="Old Man, the brushwork close up"><span>Old Man</span></a>
+          <a href="#hibiscus"><img class="fr f-cas" src="img/hibiscus-detail.webp" alt="Live Sketch of Hibiscus, the washes close up"><span>Hibiscus</span></a>
+        </div>
+        <div class="note">Her brushwork, close up. Tap one to see the whole work.</div>
       </div>
       <div class="about-text">
         <div class="eyebrow">The artist</div>
         <h2>Jomy Johnson</h2>
-        <p>Jomy Johnson is a fine artist in Ahmedabad. She trained at the Kanoria Centre for Arts, where she earned a Diploma in Fine Arts, and she now teaches drawing and painting there. She paints in oil on linen and paper, sketches flowers in watercolour from life, and draws in coloured pencil, charcoal and graphite.</p>
+        <p>Jomy Johnson is a fine artist in Ahmedabad. She paints in oil on linen and paper, often on a deep dark ground where one pale form comes out of the shadow. She sketches flowers in watercolour straight from life, and draws in coloured pencil, charcoal and graphite.</p>
+        <dl class="cv">
+          <div><dt>Training</dt><dd>Diploma in Fine Arts, Kanoria Centre for Arts, Ahmedabad, 2022&#8211;23</dd></div>
+          <div><dt>Teaching</dt><dd>Assistant class instructor, Kanoria Centre for Arts</dd></div>
+          <div><dt>Mediums</dt><dd>Oil, watercolour, coloured pencil, charcoal, graphite</dd></div>
+          <div><dt>Studio</dt><dd>Ahmedabad, Gujarat. Portrait and still-life commissions by request.</dd></div>
+        </dl>
         <div class="steps">
           <div><b>One of one</b><span>Each original is signed and sold once. When it is sold, it is marked sold here.</span></div>
           <div><b>Prints by hand</b><span>Jomy checks every print against the painting before it leaves the studio.</span></div>
           <div><b>Packed with care</b><span>Wrapped in kraft paper with corner guards and sent by tracked courier.</span></div>
-        </div>
-        <div class="pack">
-          <img id="packImg" alt="Hands wrapping a framed artwork in kraft paper with corner guards">
-          <div class="contact"><div><span>Studio</span><br>Ahmedabad, Gujarat</div><div><span>Commissions</span><br>Portraits and still life, by request</div></div>
         </div>
       </div>
     </section>
@@ -857,7 +886,7 @@ function route(){
     lastWork = h;
   } else lastWork = null;
   if(name==="cart") renderCart();
-  if(name==="about"){ $("#studioImg").src = "img/studio.webp"; $("#packImg").src = "img/packing.webp"; }
+  
 }
 addEventListener("hashchange", route);
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { route(); drawWall(); }, 120); });
