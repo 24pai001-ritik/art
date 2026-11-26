@@ -147,6 +147,10 @@ form .full{grid-column:1/-1}
 .pay{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(14px,3vw,28px);align-items:center}
 .qr{width:clamp(130px,22vh,200px);aspect-ratio:1;position:relative;background:#fff;padding:10px}
 .qr canvas,.qr img{width:100%!important;height:100%!important;filter:blur(5px)}
+.qr.live canvas,.qr.live img{filter:none}
+.ways{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.ways b{font-family:var(--display);font-size:16px;font-weight:600;margin-right:4px}
+@media (max-height:700px){ .ways .eyebrow{display:none} }
 .qr .veil{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;padding:16px;color:#1C1916;background:rgba(255,255,255,.55)}
 .empty{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px}
 .empty p{font-family:var(--display);font-size:24px;margin:0;font-weight:300}
@@ -352,11 +356,15 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 @media (max-height:620px){ #v-about .steps{display:none} }
 .approach{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:clamp(10px,2vh,18px);display:flex;flex-direction:column;gap:clamp(8px,1.4vh,12px)}
 :root[data-dir="d"] .approach .eyebrow{color:var(--ochre)}
-.ap-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
+.ap-row{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:clamp(12px,2vw,24px)}
 .ap-row b{display:block;font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(17px,1.6vw,20px);margin-bottom:4px}
 .ap-row span{display:block;font-size:14px;line-height:1.5;color:var(--ink);opacity:.82}
 @media (max-width:640px){ .ap-row{grid-template-columns:1fr;gap:8px} .ap-row div{display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:10px;align-items:baseline} .ap-row b{font-size:16px;margin:0} .ap-row span{font-size:13px;line-height:1.4} }
 @media (max-height:620px){ .ap-row span{display:none} }
+#v-about.fit1 .about-text{gap:8px} #v-about.fit1 .about-text p{font-size:14px!important;line-height:1.45!important} #v-about.fit1 .cv{gap:4px} #v-about.fit1 .cv dd{font-size:14px}
+#v-about.fit2 .ap-row span{font-size:12.5px;line-height:1.35} #v-about.fit2 .about-text h2{font-size:22px}
+#v-about.fit3 .ap-row span{display:none} #v-about.fit3 .about-text p+p{display:none}
+#v-about.fit4 .cv div:nth-child(n+4){display:none} #v-about.fit4 .about-text p{font-size:13px!important}
 .how{margin:0;padding-left:20px;font-size:14px;line-height:1.6;max-width:46ch}
 .trust{margin-top:-2px}
 @media (max-height:620px){ .trust,.cue{display:none} }
@@ -389,7 +397,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 :root[data-dir="d"] .f-rip,:root[data-dir="d"] .f-cas{padding:calc(var(--fw) * .9);background:#EDE5D6}
 :root[data-dir="d"] .fr.f-gilt,:root[data-dir="d"] .fr.f-rip,:root[data-dir="d"] .fr.f-cas{ /* Ritik 26 Nov: frame = a darker shade of the painting's own ground, with a real surface texture */
   border:0;border-image:none;padding:var(--fw);
-  background-color:color-mix(in srgb,var(--fc,#3a3028) 55%,#000);background-image:var(--ftex,url(img/tex/linen.webp));background-size:var(--ftex-size,180px);background-blend-mode:soft-light;
+  background-color:color-mix(in srgb,var(--fc,#3a3028) var(--fdark,55%),#000);background-image:var(--ftex,url(img/tex/linen.webp));background-size:var(--ftex-size,180px);background-blend-mode:soft-light;
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.5),inset 3px 3px 3px rgba(255,255,255,.10),inset -4px -4px 6px rgba(0,0,0,.45);
   outline:1px solid rgba(0,0,0,.5);outline-offset:calc(var(--fw) * -1)}
 :root[data-dir="d"] .home-art,:root[data-dir="d"] .home-tag,:root[data-dir="d"] .home-paint,:root[data-dir="d"] .home-copy h1{display:none}
@@ -450,7 +458,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
       <i class="paint home-paint hp1 s-swash" aria-hidden="true"></i><i class="paint home-paint hp2 s-dab" aria-hidden="true"></i><i class="paint home-paint hp3 s-dry" aria-hidden="true"></i>
       <a href="#grief" aria-label="Grief, see the work"><img class="home-art" src="img/grief.webp" alt="Grief, oil on linen, 2026"></a>
       <div class="home-tag"><i>Grief</i>, 2026<br>Oil on linen, 21 × 19 cm</div>
-      <div class="salon" aria-label="Works hung on the studio wall">
+      <div class="salon" id="salon" aria-label="Works hung on the studio wall">
         <div class="sc sc-out"><a href="#hibiscus"><img class="fr f-cas" src="img/hibiscus-sm.webp" alt="Live Sketch of Hibiscus, watercolour"></a></div>
         <div class="sc"><a href="#vacant"><img class="fr f-gilt" src="img/vacant-sm.webp" alt="Vacant, oil on linen"></a><a href="#acceptance"><img class="fr f-rip" src="img/acceptance-sm.webp" alt="Acceptance, coloured pencils"></a></div>
         <div class="sc"><a href="#grief" class="big"><img class="fr f-gilt" src="img/grief.webp" alt="Grief, oil on linen"></a></div>
@@ -502,7 +510,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
     </section>
 
     <section class="view" id="v-about" aria-label="About">
-      <div class="about-text">
+      <div class="about-text" id="aboutText">
         <div class="eyebrow">The artist</div>
         <h2>Jomy Johnson</h2>
         <p>Jomy Johnson is a fine artist in Ahmedabad. She paints portraits, still lifes and flowers, in oil on linen and paper and in watercolour, and draws in coloured pencil, charcoal and graphite.</p>
@@ -575,6 +583,8 @@ const ART = [
 const EDGE = {"grief":"#232026","vacant":"#2a201f","old-man":"#563b33","paper-weight":"#b68065","roses":"#bdb7bc","hibiscus":"#d1d5ce","acceptance":"#d1cbc3","bargue-charcoal":"#999893","bargue-graphite":"#c8c9bf"};
 const PRINT_LONG = [{name:"A5, true size", long:21, price:900},{name:"A4", long:30, price:1400},{name:"A3", long:42, price:2400}];
 let SHIPPING = 150;
+/* site settings the studio can change (home wall, frames, About, payments); these are today's defaults */
+let SITE = {"home": ["hibiscus", "vacant", "acceptance", "grief", "old-man", "roses", "paper-weight"], "frame": {"tex": "linen"}, "about": {"name": "Jomy Johnson", "bio": ["Jomy Johnson is a fine artist in Ahmedabad. She paints portraits, still lifes and flowers, in oil on linen and paper and in watercolour, and draws in coloured pencil, charcoal and graphite."], "approach": {"title": "Painting approach", "items": [{"t": "Out of the dark", "d": "Her oils begin on a deep dark ground. One pale form is brought up out of the shadow, and the rest is left quiet."}, {"t": "From life", "d": "Roses and hibiscus are painted in watercolour straight from life, looking at the real flower."}, {"t": "Drawing first", "d": "She copies the classical Charles Bargue plates in charcoal and graphite, so form and light are right before colour."}]}, "cv": [{"k": "Training", "v": "Diploma in Fine Arts, Kanoria Centre for Arts, Ahmedabad, 2022–23"}, {"k": "Teaching", "v": "Assistant class instructor, Kanoria Centre for Arts"}, {"k": "Mediums", "v": "Oil, watercolour, coloured pencil, charcoal, graphite"}, {"k": "Studio", "v": "Ahmedabad, Gujarat. Portrait and still-life commissions by request."}], "order": ["bio", "approach", "cv"]}, "pay": {"upi": "", "payee": "", "qr": "", "methods": [], "live": false}};
 /* sample rooms: furniture of known width gives pixels per cm (measured on each photo) */
 const ROOMS = [
   {id:"room_living", label:"Living room", src:"img/room_living.webp", known:"sofa", cm:200, px:[252,963], anchor:[607,330]},
@@ -595,7 +605,15 @@ function applyData(d){
   Object.keys(bySlug).forEach(k => delete bySlug[k]); ART.forEach(a => { bySlug[a.slug] = a; if(a.edge) EDGE[a.slug] = a.edge; });
   if(Array.isArray(d.prints) && d.prints.length) PRINT_LONG.splice(0, PRINT_LONG.length, ...d.prints);
   if(typeof d.shipping === "number") SHIPPING = d.shipping;
+  if(d.site && typeof d.site === "object"){
+    const s = d.site;
+    if(Array.isArray(s.home) && s.home.length === 7 && s.home.every(h => bySlug[h])) SITE.home = s.home;
+    if(s.frame && s.frame.tex) SITE.frame = s.frame;
+    if(s.about && s.about.name && Array.isArray(s.about.order)) SITE.about = s.about;
+    if(s.pay) SITE.pay = {upi:"", payee:"", qr:"", methods:[], ...s.pay};
+  }
 }
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const imgCache = {};
 function loadImg(src){ return imgCache[src] ||= new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; }); }
 function hexRgb(h){ const n = parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
@@ -611,8 +629,38 @@ function wallFor(slug){
   return {wall: rgbHex(w), ink: dark ? "#EFE9DF" : "#1C1916", line: dark ? "rgba(239,233,223,.25)" : "rgba(28,25,22,.22)"};
 }
 const frameOf = a => "fr " + ({Oil:"f-gilt", Watercolour:"f-cas"}[a.kind] || "f-rip");
-const fcOf = a => (a && (a.edge || EDGE[a.slug])) || "#3a3028";
-function tintStatic(){ document.querySelectorAll('a[href^="#"] > img.fr').forEach(i => { const a = bySlug[i.parentElement.getAttribute("href").slice(1)]; if(a) i.style.setProperty("--fc", fcOf(a)); }); }
+const fcOf = a => (a && (a.fcolor || a.edge || EDGE[a.slug])) || "#3a3028";
+/* frame: auto = a dark shade of the painting's own ground; her own colour is used as it is */
+const TEXS = {linen:["img/tex/linen.webp","180px"], primed:["img/tex/primed.webp","260px"], plain:null};
+function frameVars(a){
+  const t = TEXS[(a && a.ftex) || SITE.frame.tex || "linen"];
+  return `--fc:${fcOf(a)};--fdark:${a && a.fcolor ? "100%" : "55%"};--ftex:${t ? `url(${t[0]})` : "none"};--ftex-size:${t ? t[1] : "auto"}`;
+}
+function setFrame(img, a){ frameVars(a).split(";").forEach(kv => { const i = kv.indexOf(":"); img.style.setProperty(kv.slice(0,i), kv.slice(i+1)); }); }
+/* the home wall: 7 fixed places (left, pair, centre, pair, right); the studio picks which work hangs where */
+function renderSalon(){
+  const h = SITE.home.map(s => bySlug[s]); if(h.some(a => !a)) return;
+  const one = (a, big) => `<a href="#${esc(a.slug)}"${big ? ' class="big"' : ""}><img class="${frameOf(a)}" style="${frameVars(a)}" src="${im(a, big ? "" : "-sm")}" alt="${esc(a.title)}, ${esc(a.medium)}"></a>`;
+  $("#salon").innerHTML = `<div class="sc sc-out">${one(h[0])}</div><div class="sc">${one(h[1])}${one(h[2])}</div><div class="sc">${one(h[3], true)}</div><div class="sc">${one(h[4])}${one(h[5])}</div><div class="sc sc-out">${one(h[6])}</div>`;
+}
+function tintStatic(){ renderSalon(); renderAbout(); }
+/* About, in the order the studio sets */
+function renderAbout(){
+  const A = SITE.about, parts = {
+    bio: A.bio.map(p => `<p>${esc(p)}</p>`).join(""),
+    approach: `<div class="approach" aria-label="${esc(A.approach.title)}"><div class="eyebrow">${esc(A.approach.title)}</div><div class="ap-row" style="--n:${A.approach.items.length}">${A.approach.items.map(i => `<div><b>${esc(i.t)}</b><span>${esc(i.d)}</span></div>`).join("")}</div></div>`,
+    cv: A.cv.length ? `<dl class="cv">${A.cv.map(r => `<div><dt>${esc(r.k)}</dt><dd>${esc(r.v)}</dd></div>`).join("")}</dl>` : "",
+  };
+  $("#aboutText").innerHTML = `<div class="eyebrow">The artist</div><h2>${esc(A.name)}</h2>` + A.order.map(k => parts[k]).join("");
+  fitAbout();
+}
+/* her text can be long: shrink step by step until the page fits, never a scroll */
+function fitAbout(){
+  const v = $("#v-about"), t = $("#aboutText"); if(!v.classList.contains("on")) return;
+  const over = () => t.scrollHeight > t.clientHeight + 1 || v.scrollHeight > v.clientHeight + 1;
+  v.classList.remove("fit1","fit2","fit3","fit4");
+  for(const c of ["fit1","fit2","fit3","fit4"]){ if(!over()) break; v.classList.add(c); }
+}
 function printSizes(a){ const [w,h] = a.cm, m = Math.max(w,h); return PRINT_LONG.map(p => ({...p, w: Math.round(w/m*p.long), h: Math.round(h/m*p.long)})); }
 function store(k, v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)||"null"); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
 
@@ -693,8 +741,8 @@ function renderWorks(){
   const g = $("#grid");
   g.style.setProperty("--cols", cols);
   g.style.gridTemplateRows = pages > 1 ? `repeat(${per/cols},minmax(0,1fr))` : "";
-  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" style="--fc:${fcOf(a)}" src="${im(a,"-sm")}" alt="${a.title}, ${a.medium}" loading="lazy"></div>
-    <div class="cap"><i>${a.status==="study" ? a.title.replace("Charles ","") + ", " + a.medium.split(" ")[0].toLowerCase() : a.title}</i><span>${a.status==="sold"?"Sold · prints left":a.status==="study"?"Not for sale":inr(a.price)}</span></div></a>`).join("");
+  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" style="${frameVars(a)}" src="${im(a,"-sm")}" alt="${esc(a.title)}, ${esc(a.medium)}" loading="lazy"></div>
+    <div class="cap"><i>${esc(a.status==="study" ? a.title.replace("Charles ","") + ", " + a.medium.split(" ")[0].toLowerCase() : a.title)}</i><span>${a.status==="sold"?"Sold · prints left":a.status==="study"?"Not for sale":inr(a.price)}</span></div></a>`).join("");
 }
 $("#filters").addEventListener("click", e => { const g = e.target.closest("[data-pg]"); if(g){ page += +g.dataset.pg; renderWorks(); return; }
   const b = e.target.closest("[data-k]"); if(!b) return; filter = b.dataset.k; page = 0; renderWorks(); });
@@ -706,7 +754,7 @@ function renderWork(slug){
   v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
   if(document.documentElement.dataset.dir){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; } else { document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall; }
   $("#room").classList.remove("reading");
-  const img = $("#workImg"); img.src = im(a); img.className = frameOf(ART.find(x=>x.slug===slug)||{}); img.style.setProperty("--fc", fcOf(a));
+  const img = $("#workImg"); img.src = im(a); img.className = frameOf(ART.find(x=>x.slug===slug)||{}); setFrame(img, a);
   const HAS_DETAIL = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"];
   const hasD = a.detail ?? HAS_DETAIL.includes(slug);
   $("#workDetailBox").style.visibility = hasD ? "" : "hidden";
@@ -793,6 +841,7 @@ function renderPay(v){
       <button class="btn solid" type="button" id="doneBtn">Back to the works</button></div>`;
     $("#doneBtn").onclick = () => { orderState = null; location.hash = "works"; }; return;
   }
+  if(SITE.pay.live && (SITE.pay.upi || SITE.pay.qr)){ renderPayLive(v); return; }
   v.innerHTML = `<div class="cart-form" style="justify-content:center"><div class="eyebrow">Order ${orderState.id}</div><h2>Pay ${inr(orderState.total)} by UPI</h2>
     <div class="pay"><div class="qr"><div id="qrBox"></div><div class="veil">Jomy's UPI QR will appear here, with the amount and order number filled in.</div></div>
       <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
@@ -805,6 +854,23 @@ function renderPay(v){
     </form>
     <div class="note">Preview only: no money can be paid here yet.</div></div>`;
   try{ new QRCode($("#qrBox"), {text:"preview only " + orderState.id, width:180, height:180}); }catch(e){}
+}
+/* real payments: only when the studio switch is on (the server keeps it off until Ritik gives the word) */
+function renderPayLive(v){
+  const P = SITE.pay, o = orderState;
+  const upi = P.upi ? `upi://pay?pa=${encodeURIComponent(P.upi)}&pn=${encodeURIComponent(P.payee || "Jomy Johnson")}&am=${o.total}&cu=INR&tn=${encodeURIComponent(o.id)}` : "";
+  const ways = P.methods.length ? `<div class="ways"><div class="eyebrow">Other ways to pay</div>${P.methods.map(m => `<div><b>${esc(m.name)}</b>${m.text ? ` ${esc(m.text)}` : ""}${m.url ? ` <a href="${esc(m.url)}" target="_blank" rel="noopener">Open</a>` : ""}</div>`).join("")}</div>` : "";
+  v.innerHTML = `<div class="cart-form" style="justify-content:center"><div class="eyebrow">Order ${o.id}</div><h2>Pay ${inr(o.total)} by UPI</h2>
+    <div class="pay"><div class="qr live"><div id="qrBox">${upi ? "" : `<img src="${im({img:P.qr})}" alt="Jomy's UPI QR code">`}</div></div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div>${upi ? `Scan with any UPI app. The amount and the order number <b>${o.id}</b> are already filled in.` : `Scan with any UPI app, pay <b>${inr(o.total)}</b> and write <b>${o.id}</b> in the note.`}${P.upi ? ` UPI ID: <b>${esc(P.upi)}</b>` : ""}</div>
+        ${upi ? `<a class="btn" href="${upi}">Pay in UPI app</a>` : ""}
+      </div></div>${ways}
+    <form id="utrForm" style="grid-template-columns:1fr auto;align-items:end">
+      <div class="field"><label for="f-utr">UPI reference number (12 digits)</label><input id="f-utr" required inputmode="numeric" pattern="[0-9]{12}" placeholder="from your UPI app's receipt"></div>
+      <button class="btn solid" type="submit">I have paid</button>
+    </form></div>`;
+  if(upi) try{ new QRCode($("#qrBox"), {text:upi, width:200, height:200}); }catch(e){}
 }
 
 /* ---------- wall try-on ---------- */
@@ -913,6 +979,7 @@ function route(){
     lastWork = h;
   } else lastWork = null;
   if(name==="cart") renderCart();
+  if(name==="about") fitAbout();
   
 }
 addEventListener("hashchange", route);
