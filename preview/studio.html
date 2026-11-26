@@ -82,6 +82,55 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
 .prices{flex:1;min-height:0;display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px);max-width:620px}
 .prow{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:10px}
 
+/* site hub + editors */
+.head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.head p{color:var(--muted);font-size:14px;margin-right:auto}
+.hub{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:clamp(10px,2vw,22px);max-width:900px;width:100%;align-self:center;max-height:520px}
+.hub button{border:1px solid var(--line);background:var(--field);border-radius:2px;text-align:left;padding:clamp(12px,2.4vh,26px);display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-height:0}
+.hub button:hover,.hub button:focus-visible{border-color:var(--ochre)}
+.hub b{font:600 clamp(19px,3vh,26px)/1.1 var(--display);color:var(--ochre)}
+.hub span{font-size:14px;color:var(--muted)}
+.mv{display:flex;gap:4px;justify-content:center}
+.mv button{border:1px solid var(--line);background:none;min-width:34px;min-height:30px;border-radius:2px;font-size:14px;padding:0 6px}
+.mv button:disabled{opacity:.3}
+.grab{cursor:grab;touch-action:none}
+.sortable-ghost{opacity:.35}
+.atiles{flex:1;min-height:0;display:grid;gap:8px;grid-template-columns:repeat(var(--c),minmax(0,1fr));grid-template-rows:repeat(var(--r),minmax(0,1fr))}
+.atile{min-height:0;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:2px;padding:4px;background:var(--field)}
+.atile .pic{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.atile img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
+.atile .t{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.atile .n{font-size:11px;color:var(--ochre);text-align:center}
+.slots{flex:1;min-height:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.slot{min-height:0;display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:2px;padding:8px;background:var(--field)}
+.slot.big{border-color:var(--ochre)}
+.slot .pic{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.slot img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
+.slot .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
+.slot select{background:var(--field);border:1px solid var(--line);border-radius:2px;padding:6px;width:100%;min-width:0;font-size:13px}
+.slot select option{background:#1C1917}
+.texpick{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.texpick button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:none;border-radius:2px;padding:6px 12px 6px 6px}
+.texpick button[aria-pressed="true"]{border-color:var(--ochre);color:var(--ochre)}
+.texpick i{width:34px;height:26px;display:block}
+.framed{--fw:clamp(9px,1.8vh,18px);padding:var(--fw)!important;background-color:color-mix(in srgb,var(--fc,#3a3028) var(--fdark,55%),#000);background-image:var(--ftex);background-size:var(--ftex-size,180px);background-blend-mode:soft-light;box-shadow:inset 0 0 0 1px rgba(0,0,0,.5),inset 3px 3px 3px rgba(255,255,255,.10),inset -4px -4px 6px rgba(0,0,0,.45),0 6px 18px rgba(0,0,0,.45)!important}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs .btn{min-height:34px;padding:4px 14px}
+.pane{flex:1;min-height:0;display:none;grid-template-columns:1fr 1fr;gap:clamp(6px,1.2vh,12px) 12px;align-content:start;max-width:900px}
+.pane.on{display:grid}
+.f textarea{background:var(--field);border:1px solid var(--line);border-radius:2px;padding:8px 10px;width:100%;resize:none;font:inherit;color:inherit;min-height:0}
+.f textarea:focus{outline:2px solid var(--ochre)}
+.orow{grid-column:1/-1;display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:2px;padding:8px 10px;background:var(--field)}
+.orow b{font:600 18px/1.2 var(--display);margin-right:auto}
+.fc-row{display:flex;gap:6px}
+.fc-row select{flex:1;min-width:0}
+.fc-row input[type=color]{width:46px;padding:2px;flex:none;height:auto}
+.qrbox{display:flex;gap:12px;align-items:center}
+.qrbox .q{width:clamp(64px,12vh,110px);aspect-ratio:1;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;background:#fff;color:#555;font-size:11px;text-align:center}
+.qrbox .q img{width:100%;height:100%;object-fit:contain}
+.mrow{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.7fr 1.3fr;gap:8px}
+.lock{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);border:1px solid var(--line);padding:8px 10px;border-radius:2px}
+.lock input{width:22px;height:22px;flex:none}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#2A2420;border:1px solid var(--line);padding:10px 18px;border-radius:2px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.on{opacity:1}
 .toast.bad{border-color:var(--bad);color:var(--bad)}
@@ -96,7 +145,19 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
   form.fields{gap:6px 10px}
   .prow{grid-template-columns:1.3fr 1fr 1fr}
   .listhead p{display:none}
+  .head p{display:none}
+  .hub{grid-template-columns:1fr}
+  .slots{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:6px}
+  .slot{padding:5px;gap:4px}
+  .pane{grid-template-columns:1fr}
+  .mrow{grid-template-columns:1fr 1fr;gap:6px} .mrow .wide{grid-column:1/-1;order:3}
+  #ab-cv{grid-template-columns:1fr 2fr;gap:6px} #ab-cv .f>span{display:none}
+  .bar .btn{padding:4px 9px;min-height:32px;font-size:13px} .bar{gap:6px} .bar h1{flex-basis:100%}
+  .qrbox .q{width:72px}
+  #paypane>label.f>span{display:none}
+  .lock .more{display:none} .lock{padding:6px 8px;font-size:12px} #paypane{gap:6px}
 }
+@media (max-height:700px){ .pane .f textarea{max-height:9vh} .hub span{display:none} }
 @media (max-height:560px){ .photo .pic{display:none} .edit{grid-template-rows:auto auto} .hint{display:none} }
 </style>
 </head>
@@ -116,7 +177,8 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
 <header class="bar screen" id="topbar" style="flex:none;padding-bottom:0">
   <h1>Studio</h1>
   <button class="btn" type="button" data-go="list">Paintings</button>
-  <button class="btn" type="button" data-go="prices">Print prices</button>
+  <button class="btn" type="button" data-go="site">Site</button>
+  <button class="btn" type="button" data-go="prices">Prices</button>
   <a class="btn" href="/#works" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center">View site</a>
   <button class="btn" type="button" id="logout">Log out</button>
 </header>
@@ -143,6 +205,8 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
       <label class="f"><span>Height, cm</span><input id="h" type="number" inputmode="decimal" step="0.5" min="1"></label>
       <label class="f"><span>Original</span><select id="status"><option value="available">For sale</option><option value="sold">Sold</option><option value="study">Not for sale</option></select></label>
       <label class="f"><span>Price, ₹</span><input id="price" type="number" inputmode="numeric" min="0" step="100"></label>
+      <label class="f"><span>Frame colour</span><span class="fc-row"><select id="fmode" aria-label="Frame colour"><option value="auto">Auto, from the painting</option><option value="own">My colour</option></select><input type="color" id="fcolor" aria-label="Pick the frame colour"></span></label>
+      <label class="f"><span>Frame texture</span><select id="ftex"><option value="">Same as the site</option><option value="linen">Linen</option><option value="primed">Gesso</option><option value="plain">Plain</option></select></label>
       <label class="f check full"><input type="checkbox" id="prints"><span>Sell prints of this painting</span></label>
       <p class="hint" id="hint">Changes show on the website as soon as you save.</p>
       <div class="actions">
@@ -165,7 +229,43 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
   </form>
 </section>
 
+<section class="screen" id="site" aria-labelledby="sh">
+  <h2 id="sh">Site</h2>
+  <div class="hub">
+    <button type="button" data-go="arrange"><b>Arrange the works</b><span>Drag paintings into the order the Works page shows.</span></button>
+    <button type="button" data-go="home"><b>Home wall &amp; frames</b><span>Pick which 7 works hang on the home page, and the frame texture.</span></button>
+    <button type="button" data-go="about"><b>About page</b><span>Change your bio, painting approach and facts, and their order.</span></button>
+    <button type="button" data-go="pay"><b>Payments</b><span>Your UPI ID, your QR code and other ways to pay.</span></button>
+  </div>
+</section>
+
+<section class="screen" id="arrange" aria-labelledby="ah">
+  <div class="head"><h2 id="ah">Arrange the works</h2><p>Drag a painting to move it, or use &lsaquo; &rsaquo;. The first one shows first.</p><div class="pager" id="apager"></div></div>
+  <div class="atiles" id="atiles"></div>
+  <div class="actions"><button class="btn main" type="button" id="asave">Save order</button><button class="btn" type="button" data-go="site">Back</button></div>
+</section>
+
+<section class="screen" id="home" aria-labelledby="hh">
+  <div class="head"><h2 id="hh">Home wall &amp; frames</h2><p>Drag to swap places, or pick a painting in a box. Left and Right are hidden on phones.</p></div>
+  <div class="slots" id="slots"></div>
+  <div class="texpick" id="texpick"></div>
+  <div class="actions"><button class="btn main" type="button" id="hsave">Save</button><button class="btn" type="button" data-go="site">Back</button></div>
+</section>
+
+<section class="screen" id="about" aria-labelledby="abh">
+  <div class="head"><h2 id="abh">About page</h2><div class="tabs" id="abtabs"></div></div>
+  <div class="pane" id="ab-bio"></div><div class="pane" id="ab-approach"></div><div class="pane" id="ab-cv"></div><div class="pane" id="ab-order"></div>
+  <div class="actions"><button class="btn main" type="button" id="absave">Save</button><button class="btn" type="button" data-go="site">Back</button></div>
+</section>
+
+<section class="screen" id="pay" aria-labelledby="payh">
+  <h2 id="payh">Payments</h2>
+  <div class="pane on" id="paypane"></div>
+  <div class="actions"><button class="btn main" type="button" id="paysave">Save</button><button class="btn" type="button" data-go="site">Back</button></div>
+</section>
+
 <div class="toast" id="toast" role="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 
 <script>
 const $ = s => document.querySelector(s);
@@ -184,9 +284,13 @@ async function api(path, opt = {}){
 function show(s){
   screen = s;
   document.querySelectorAll(".screen").forEach(e => e.classList.toggle("on", e.id === s || (e.id === "topbar" && s !== "login")));
-  document.querySelectorAll("[data-go]").forEach(b => b.toggleAttribute("aria-current", b.dataset.go === s || (s==="edit" && b.dataset.go==="list" && b.closest(".bar"))));
+  document.querySelectorAll(".bar [data-go]").forEach(b => b.toggleAttribute("aria-current", b.dataset.go === s || (s==="edit" && b.dataset.go==="list") || (SITE_SCREENS.includes(s) && b.dataset.go==="site")));
   if(s === "list") drawList();
   if(s === "prices") drawPrices();
+  if(s === "arrange"){ aorder = data.works.map(a => a.slug); apage = 0; drawArrange(); }
+  if(s === "home"){ hs = data.site.home.slice(); htex = data.site.frame.tex; drawHome(); }
+  if(s === "about"){ ab = structuredClone(data.site.about); drawAbout(); }
+  if(s === "pay"){ pay = structuredClone(data.site.pay); qrPick = null; drawPay(); }
 }
 document.addEventListener("click", e => { const g = e.target.closest("[data-go]"); if(g) show(g.dataset.go); });
 
@@ -198,7 +302,15 @@ $("#loginForm").addEventListener("submit", async e => {
   catch(err){ $("#loginMsg").textContent = err.message; }
 });
 $("#logout").addEventListener("click", async () => { try{ await api("/api/logout", {method:"POST"}); }catch(e){} show("login"); });
-async function load(){ data = await (await fetch("/api/art", {cache:"no-store"})).json(); }
+const SITE_SCREENS = ["site","arrange","home","about","pay"];
+async function load(){
+  data = await (await fetch("/api/art", {cache:"no-store"})).json();
+  if(!data.site || !data.site.about || !data.site.pay || data.site.pay.upi === undefined){ /* older saves: start from today's defaults */
+    const seed = await (await fetch("/data/seed.json", {cache:"no-store"})).json(), old = data.site || {};
+    data.site = {...seed.site, ...(old.home ? {home: old.home} : {}), ...(old.frame ? {frame: old.frame} : {}), ...(old.about ? {about: old.about} : {}),
+      pay: (old.pay && old.pay.upi !== undefined) ? old.pay : seed.site.pay};
+  }
+}
 
 /* ---------- paintings list ---------- */
 const src = (a, suf="-sm") => `img/${a.img || a.slug}${suf}.webp`;
@@ -229,11 +341,24 @@ function openEdit(a){
   $("#w").value = a ? a.cm[0] : ""; $("#h").value = a ? a.cm[1] : "";
   $("#status").value = a ? a.status : "available"; $("#price").value = a && a.price != null ? a.price : "";
   $("#prints").checked = a ? a.prints : true;
+  $("#fmode").value = a && a.fcolor ? "own" : "auto"; $("#fcolor").value = (a && (a.fcolor || a.edge)) || "#3a3028"; $("#ftex").value = (a && a.ftex) || "";
+  framePreview();
   $("#del").hidden = !a; syncPrice();
   show("edit");
 }
 function syncPrice(){ const s = $("#status").value; $("#price").disabled = s === "study"; if(s === "study") $("#price").value = ""; }
 $("#status").addEventListener("change", syncPrice);
+/* frame: same look as the website, shown on the photo here */
+const TEXS = {linen:["img/tex/linen.webp","180px"], primed:["img/tex/primed.webp","260px"], plain:null};
+function frameVars(fc, own, tex){ const t = TEXS[tex || (data && data.site && data.site.frame.tex) || "linen"];
+  return {"--fc":fc, "--fdark": own ? "100%" : "55%", "--ftex": t ? `url(${t[0]})` : "none", "--ftex-size": t ? t[1] : "auto"}; }
+function paint(el, v){ el.classList.add("framed"); Object.entries(v).forEach(([k,x]) => el.style.setProperty(k, x)); }
+function framePreview(){
+  const own = $("#fmode").value === "own"; $("#fcolor").disabled = !own;
+  const edge = (typeof pick !== "undefined" && pick && pick.edge) || (cur && cur.edge) || "#3a3028"; if(!own) $("#fcolor").value = edge;
+  const img = $("#pic img"); if(img) paint(img, frameVars(own ? $("#fcolor").value : edge, own, $("#ftex").value));
+}
+["fmode","fcolor","ftex"].forEach(id => $("#" + id).addEventListener("input", framePreview));
 
 /* photo: resized here in the browser, so the upload is small */
 function canvasOf(bmp, long){ const k = Math.min(1, long / Math.max(bmp.width, bmp.height)); const c = document.createElement("canvas");
@@ -282,6 +407,8 @@ $("#form").addEventListener("submit", async e => {
     if(cur){ row = next.works.find(a => a.slug === cur.slug); oldImg = row.img || null; }
     else { row = {slug: slugify(w.title) + "-" + tag().slice(-4), detail: false}; next.works.unshift(row); }
     Object.assign(row, w);
+    if($("#fmode").value === "own") row.fcolor = $("#fcolor").value; else delete row.fcolor;
+    if($("#ftex").value) row.ftex = $("#ftex").value; else delete row.ftex;
     if(pick){
       const name = row.slug + "-" + tag();
       await putImg(name, pick.big); await putImg(name + "-sm", pick.sm);
@@ -298,7 +425,7 @@ $("#form").addEventListener("submit", async e => {
 
 $("#del").addEventListener("click", async () => {
   if(!cur) return;
-  if(ON_HOME.includes(cur.slug)) return toast("This one hangs on the home wall, so it cannot be deleted. Mark it Sold or Not for sale instead.", true);
+  if(((data.site && data.site.home) || ON_HOME).includes(cur.slug)) return toast("This one hangs on the home wall, so it cannot be deleted. Mark it Sold or Not for sale instead.", true);
   if(!confirm(`Delete "${cur.title}" from the website? This cannot be undone.`)) return;
   try{
     const next = structuredClone(data); next.works = next.works.filter(a => a.slug !== cur.slug);
@@ -326,7 +453,137 @@ $("#pform").addEventListener("submit", async e => {
   try{ await saveArt(next); toast("Prices saved. The website shows them now."); }catch(err){ toast(err.message, true); }
 });
 
-let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if(screen === "list") drawList(); }, 120); });
+/* ---------- site: arrange the works ---------- */
+let aorder = [], apage = 0, sorts = [];
+const killSorts = () => { sorts.forEach(x => x.destroy()); sorts = []; };
+const sortable = (el, onEnd) => { if(window.Sortable) sorts.push(Sortable.create(el, {animation:150, ghostClass:"sortable-ghost", delay:120, delayOnTouchOnly:true, filter:"button,select,input,textarea", preventOnFilter:false, onEnd})); };
+const bySlug = s => data.works.find(a => a.slug === s);
+function drawArrange(){
+  killSorts();
+  const w = innerWidth, h = innerHeight, c = w < 520 ? 4 : w < 900 ? 6 : 9, r = h < 600 ? 2 : h < 760 ? 3 : 4, per = c * r;
+  const pages = Math.max(1, Math.ceil(aorder.length / per)); apage = Math.min(apage, pages - 1);
+  const t = $("#atiles"); t.style.setProperty("--c", c); t.style.setProperty("--r", r);
+  t.innerHTML = aorder.slice(apage*per, apage*per + per).map((sl, k) => { const a = bySlug(sl), i = apage*per + k;
+    return `<div class="atile grab" data-slug="${sl}"><div class="n">${i+1}</div><div class="pic"><img src="${src(a)}" alt=""></div><div class="t">${esc(a.title)}</div>
+      <div class="mv"><button type="button" data-mv="-1" data-i="${i}" ${i?"":"disabled"} aria-label="Move ${esc(a.title)} earlier">&lsaquo;</button><button type="button" data-mv="1" data-i="${i}" ${i<aorder.length-1?"":"disabled"} aria-label="Move ${esc(a.title)} later">&rsaquo;</button></div></div>`; }).join("");
+  $("#apager").innerHTML = pages > 1 ? `<button class="btn" type="button" data-pg="-1" ${apage?"":"disabled"} aria-label="Previous page">&lsaquo;</button><span>${apage+1} / ${pages}</span><button class="btn" type="button" data-pg="1" ${apage<pages-1?"":"disabled"} aria-label="Next page">&rsaquo;</button>` : "";
+  sortable(t, () => { const now = [...t.children].map(e => e.dataset.slug); aorder.splice(apage*per, now.length, ...now); drawArrange(); });
+}
+$("#atiles").addEventListener("click", e => { const b = e.target.closest("[data-mv]"); if(!b) return; const i = +b.dataset.i, j = i + +b.dataset.mv; [aorder[i], aorder[j]] = [aorder[j], aorder[i]]; drawArrange(); });
+$("#apager").addEventListener("click", e => { const b = e.target.closest("[data-pg]"); if(b){ apage += +b.dataset.pg; drawArrange(); } });
+$("#asave").addEventListener("click", async () => {
+  const next = structuredClone(data); next.works = aorder.map(sl => next.works.find(a => a.slug === sl));
+  try{ await saveArt(next); toast("Order saved. The Works page shows it now."); }catch(err){ toast(err.message, true); }
+});
+
+/* ---------- site: home wall + frame texture ---------- */
+let hs = [], htex = "linen";
+const PLACES = ["Left","Top left","Bottom left","Centre, large","Top right","Bottom right","Right"];
+function drawHome(){
+  killSorts();
+  const opts = sl => data.works.map(a => `<option value="${a.slug}" ${a.slug===sl?"selected":""}>${esc(a.title)}</option>`).join("");
+  $("#slots").innerHTML = hs.map((sl, i) => { const a = bySlug(sl);
+    return `<div class="slot grab${i===3?" big":""}" data-slug="${sl}"><div class="lab">${PLACES[i]}</div><div class="pic"><img src="${src(a)}" alt=""></div>
+      <select data-i="${i}" aria-label="Painting for ${PLACES[i]}">${opts(sl)}</select></div>`; }).join("");
+  document.querySelectorAll("#slots .slot").forEach(el => { const a = bySlug(el.dataset.slug), im = el.querySelector("img");
+    paint(im, frameVars(a.fcolor || a.edge || "#3a3028", !!a.fcolor, a.ftex || htex)); im.style.setProperty("--fw","6px"); });
+  sortable($("#slots"), () => { hs = [...$("#slots").children].map(e => e.dataset.slug); drawHome(); });
+  $("#texpick").innerHTML = `<span class="eyebrow">Frame texture</span>` + [["linen","Linen"],["primed","Gesso"],["plain","Plain"]].map(([k,l]) =>
+    `<button type="button" data-tex="${k}" aria-pressed="${k===htex}"><i></i>${l}</button>`).join("");
+  document.querySelectorAll("#texpick i").forEach(i => { paint(i, frameVars("#4a3a2c", false, i.parentElement.dataset.tex)); i.style.setProperty("--fw","0px"); });
+}
+$("#slots").addEventListener("change", e => { const s = e.target.closest("select"); if(!s) return; const i = +s.dataset.i, j = hs.indexOf(s.value);
+  if(j >= 0) hs[j] = hs[i]; hs[i] = s.value; drawHome(); });
+$("#texpick").addEventListener("click", e => { const b = e.target.closest("[data-tex]"); if(b){ htex = b.dataset.tex; drawHome(); } });
+$("#hsave").addEventListener("click", async () => {
+  const next = structuredClone(data); next.site.home = hs.slice(); next.site.frame = {tex: htex};
+  try{ await saveArt(next); toast("Saved. The home page shows it now."); }catch(err){ toast(err.message, true); }
+});
+
+/* ---------- site: About page ---------- */
+let ab = null, abtab = "bio";
+const BLOCK_NAMES = {bio:"Bio", approach:"Painting approach", cv:"Facts (training, teaching...)"};
+const fld = (label, key, val, max, area, rows) => `<label class="f${area ? " full" : ""}"><span>${label}</span>${area ? `<textarea data-k="${key}" maxlength="${max}" rows="${rows||3}">${esc(val)}</textarea>` : `<input data-k="${key}" maxlength="${max}" value="${esc(val)}" placeholder="${label}">`}</label>`;
+function drawAbout(){
+  killSorts();
+  $("#abtabs").innerHTML = [["bio","Bio"],["approach","Approach"],["cv","Facts"],["order","Order"]].map(([k,l]) => `<button class="btn" type="button" data-tab="${k}" ${k===abtab?"aria-current":""}>${l}</button>`).join("");
+  document.querySelectorAll("#about .pane").forEach(p => p.classList.toggle("on", p.id === "ab-" + abtab));
+  const A = ab, it = A.approach.items, cv = A.cv;
+  $("#ab-bio").innerHTML = fld("Name", "name", A.name, 40) + "<span></span>" + fld("Bio", "bio.0", A.bio[0] || "", 420, true, 4) + fld("Second paragraph (optional)", "bio.1", A.bio[1] || "", 420, true, 3);
+  $("#ab-approach").innerHTML = fld("Section title", "ap.title", A.approach.title, 40) + "<span></span>" +
+    [0,1,2].map(i => fld(`Point ${i+1} heading`, `ap.${i}.t`, (it[i] && it[i].t) || "", 30) + fld(`Point ${i+1} text`, `ap.${i}.d`, (it[i] && it[i].d) || "", 170)).join("");
+  $("#ab-cv").innerHTML = [0,1,2,3,4].map(i => fld(`Label ${i+1}`, `cv.${i}.k`, (cv[i] && cv[i].k) || "", 16) + fld(`Text ${i+1}`, `cv.${i}.v`, (cv[i] && cv[i].v) || "", 110)).join("");
+  $("#ab-order").innerHTML = `<p class="hint" style="grid-column:1/-1">Drag, or use &#9650; &#9660;. The top block shows first, under your name.</p><div id="olist" style="grid-column:1/-1;display:flex;flex-direction:column;gap:8px">` +
+    A.order.map((k, i) => `<div class="orow grab" data-k="${k}"><b>${BLOCK_NAMES[k]}</b><span class="mv"><button type="button" data-om="-1" data-i="${i}" ${i?"":"disabled"} aria-label="Move up">&#9650;</button><button type="button" data-om="1" data-i="${i}" ${i<2?"":"disabled"} aria-label="Move down">&#9660;</button></span></div>`).join("") + `</div>`;
+  if(abtab === "order") sortable($("#olist"), () => { ab.order = [...$("#olist").children].map(e => e.dataset.k); drawAbout(); });
+}
+$("#abtabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if(b){ abtab = b.dataset.tab; drawAbout(); } });
+$("#ab-order").addEventListener("click", e => { const b = e.target.closest("[data-om]"); if(!b) return; const i = +b.dataset.i, j = i + +b.dataset.om; [ab.order[i], ab.order[j]] = [ab.order[j], ab.order[i]]; drawAbout(); });
+$("#about").addEventListener("input", e => { const k = e.target.dataset.k; if(!k) return; const v = e.target.value, p = k.split(".");
+  if(p[0] === "name") ab.name = v;
+  if(p[0] === "bio") ab.bio[+p[1]] = v;
+  if(p[0] === "ap"){ if(p[1] === "title") ab.approach.title = v; else { const i = +p[1]; ab.approach.items[i] = ab.approach.items[i] || {t:"", d:""}; ab.approach.items[i][p[2]] = v; } }
+  if(p[0] === "cv"){ const i = +p[1]; ab.cv[i] = ab.cv[i] || {k:"", v:""}; ab.cv[i][p[2]] = v; }
+});
+$("#absave").addEventListener("click", async () => {
+  const t = s => (s || "").trim(), A = ab;
+  const out = {name: t(A.name), bio: A.bio.map(t).filter(Boolean), approach: {title: t(A.approach.title), items: []}, cv: [], order: A.order.slice()};
+  for(const i of A.approach.items){ if(!i) continue; const a = t(i.t), b = t(i.d); if(!a && !b) continue; if(!a || !b) return toast("Each approach point needs a heading and a text.", true); out.approach.items.push({t:a, d:b}); }
+  for(const r of A.cv){ if(!r) continue; const a = t(r.k), b = t(r.v); if(!a && !b) continue; if(!a || !b) return toast("Each fact needs a label and a text.", true); out.cv.push({k:a, v:b}); }
+  if(!out.name) return toast("Please add your name.", true);
+  if(!out.bio.length) return toast("Please write a bio.", true);
+  if(!out.approach.title || !out.approach.items.length) return toast("Please keep a title and at least one approach point.", true);
+  const next = structuredClone(data); next.site.about = out;
+  try{ await saveArt(next); toast("Saved. The About page shows it now."); }catch(err){ toast(err.message, true); }
+});
+
+/* ---------- site: payments ---------- */
+let pay = null, qrPick = null;
+function drawPay(){
+  const P = pay, m = i => P.methods[i] || {name:"", text:"", url:""};
+  $("#paypane").innerHTML =
+    `<label class="f"><span>Your UPI ID</span><input id="p-upi" maxlength="120" placeholder="Your UPI ID, like name@okaxis" value="${esc(P.upi)}" autocomplete="off"></label>
+     <label class="f"><span>Name on the UPI account</span><input id="p-payee" maxlength="60" placeholder="Name on the UPI account" value="${esc(P.payee)}"></label>
+     <div class="f full"><span>Your UPI QR code (photo or screenshot)</span><div class="qrbox"><div class="q">${qrPick ? `<img src="${URL.createObjectURL(qrPick)}" alt="">` : P.qr ? `<img src="img/${P.qr}.webp" alt="">` : "No QR yet"}</div>
+       <label class="btn" for="p-qr">${P.qr || qrPick ? "Change QR" : "Add QR"}</label><input type="file" id="p-qr" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0">
+       ${P.qr || qrPick ? `<button class="btn bad" type="button" id="p-qrdel">Remove</button>` : ""}</div></div>
+     <div class="f full"><span>Other ways to pay (optional, up to 3)</span></div>` +
+    [0,1,2].slice(0, Math.min(3, P.methods.filter(x => x && (x.name || x.text || x.url)).length + 1)).map(i => `<div class="mrow"><label class="f"><input data-m="${i}" data-mk="name" maxlength="40" placeholder="${["Bank transfer","Payment link","Cash on pickup"][i]}" value="${esc(m(i).name)}" aria-label="Way ${i+1} name"></label>
+      <label class="f wide"><input data-m="${i}" data-mk="text" maxlength="200" placeholder="Details buyers should see" value="${esc(m(i).text)}" aria-label="Way ${i+1} details"></label>
+      <label class="f"><input data-m="${i}" data-mk="url" maxlength="300" placeholder="https:// link (optional)" value="${esc(m(i).url)}" aria-label="Way ${i+1} link"></label></div>`).join("") +
+    `<label class="lock"><input type="checkbox" disabled ${P.live ? "checked" : ""}><span><b style="color:var(--ink)">Take real payments: off.</b> <span class="more">Buyers still see a preview QR. </span>This turns on after orders are saved on the website and Ritik switches it on.</span></label>`;
+}
+$("#paypane").addEventListener("input", e => { const d = e.target.dataset; if(d.m !== undefined){ const i = +d.m; pay.methods[i] = pay.methods[i] || {name:"", text:"", url:""}; pay.methods[i][d.mk] = e.target.value;
+    if(document.querySelectorAll("#paypane .mrow").length < 3 && i === document.querySelectorAll("#paypane .mrow").length - 1 && e.target.value.length === 1){ const at = e.target.selectionStart, key = `[data-m="${i}"][data-mk="${d.mk}"]`; drawPay(); const el = $("#paypane " + key); el.focus(); el.setSelectionRange(at, at); } }
+  if(e.target.id === "p-upi") pay.upi = e.target.value.trim(); if(e.target.id === "p-payee") pay.payee = e.target.value; });
+$("#paypane").addEventListener("click", e => { if(e.target.id === "p-qrdel"){ qrPick = null; pay.qr = ""; drawPay(); } });
+$("#paypane").addEventListener("change", async e => {
+  if(e.target.id !== "p-qr" || !e.target.files[0]) return;
+  try{ const bmp = await createImageBitmap(e.target.files[0], {imageOrientation:"from-image"}); const c = canvasOf(bmp, 900);
+    let b = await new Promise(r => c.toBlob(r, "image/png")); /* PNG keeps the QR sharp */
+    if(!b || b.size > 1.8e6) b = await new Promise(r => c.toBlob(r, "image/webp", .95));
+    if(!b || b.size > 1.8e6) throw new Error("That picture is too large.");
+    qrPick = b; drawPay();
+  }catch(err){ toast(err.message || "That picture could not be read.", true); }
+});
+$("#paysave").addEventListener("click", async () => {
+  const P = pay, t = s => (s || "").trim();
+  if(P.upi && !/^[a-zA-Z0-9._-]{2,256}@[a-zA-Z0-9]{2,64}$/.test(P.upi)) return toast("That UPI ID doesn't look right. It looks like name@bank.", true);
+  const methods = [];
+  for(const m of P.methods){ if(!m) continue; const n = t(m.name), x = t(m.text), u = t(m.url); if(!n && !x && !u) continue;
+    if(!n) return toast("Give each way to pay a name.", true); if(u && !/^https:\/\/\S+$/.test(u)) return toast("Links must start with https://", true); methods.push({name:n, text:x, url:u}); }
+  try{
+    const old = data.site.pay.qr; let qr = P.qr;
+    if(qrPick){ qr = "qr-" + tag(); await putImg(qr, qrPick); }
+    const next = structuredClone(data); next.site.pay = {upi: P.upi, payee: t(P.payee), qr, methods, live: false};
+    await saveArt(next); pay.qr = qr; qrPick = null;
+    if(old && old !== qr) api("/api/img/" + old, {method:"DELETE"}).catch(()=>{});
+    toast("Saved. Buyers will see these once real payments are switched on."); drawPay();
+  }catch(err){ toast(err.message, true); }
+});
+
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if(screen === "list") drawList(); if(screen === "arrange") drawArrange(); }, 120); });
+
 
 /* start: already logged in? */
 (async () => {
