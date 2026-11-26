@@ -42,8 +42,11 @@ a{color:inherit}
 .foot .soc{display:flex;gap:clamp(14px,3vw,26px)}
 .foot .soc a{text-decoration:none;text-transform:uppercase;letter-spacing:.14em;padding:6px 0;border-bottom:1px solid transparent}
 .foot .soc a:hover,.foot .soc a:focus-visible{border-color:currentColor}
-.foot .by{color:var(--muted);font-weight:300;letter-spacing:.1em;white-space:nowrap}
-@media (max-width:380px){.foot{font-size:11px}.foot .soc{gap:12px}}
+.foot .by{color:var(--muted);font-weight:300;letter-spacing:.1em;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:8px}
+.foot .by img{height:clamp(16px,2.6vh,20px);width:auto;flex:none}
+.foot .by:hover,.foot .by:focus-visible{color:var(--ink)}
+@media (max-width:420px){.foot{font-size:11px;gap:8px;padding:0 12px}.foot .soc{gap:12px}.foot .soc a{letter-spacing:.08em}.foot .by{letter-spacing:.02em;gap:5px}}
+@media (max-width:345px){.foot .an{display:none}.foot .soc{gap:10px}}
 .view{position:absolute;inset:0;display:none;min-height:0}
 .view.on{display:flex}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid currentColor;background:transparent;
@@ -544,7 +547,7 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
       <a href="https://wa.me/919978748249?text=Hello%20Jomy%2C%20I%20saw%20your%20paintings%20on%20your%20website." target="_blank" rel="noopener">WhatsApp</a>
       <a href="https://www.instagram.com/jomysart/" target="_blank" rel="noopener">Instagram</a>
     </div>
-    <span class="by">An Entropy AI creation</span>
+    <a class="by" href="https://entropyai.hello-entropyai.workers.dev/" target="_blank" rel="noopener"><img src="img/entropy-logo.webp" alt="" width="20" height="20"><span><span class="an">An </span>Entropy AI creation</span></a>
   </footer>
 </div>
 
