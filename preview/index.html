@@ -350,6 +350,13 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
   :root[data-dir="d"] .about-text p{font-size:15px;line-height:1.5}
 }
 @media (max-height:620px){ #v-about .steps{display:none} }
+.approach{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-block:clamp(10px,2vh,18px);display:flex;flex-direction:column;gap:clamp(8px,1.4vh,12px)}
+:root[data-dir="d"] .approach .eyebrow{color:var(--ochre)}
+.ap-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2vw,24px)}
+.ap-row b{display:block;font-family:var(--display);font-style:italic;font-weight:400;font-size:clamp(17px,1.6vw,20px);margin-bottom:4px}
+.ap-row span{display:block;font-size:14px;line-height:1.5;color:var(--ink);opacity:.82}
+@media (max-width:640px){ .ap-row{grid-template-columns:1fr;gap:8px} .ap-row div{display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:10px;align-items:baseline} .ap-row b{font-size:16px;margin:0} .ap-row span{font-size:13px;line-height:1.4} }
+@media (max-height:620px){ .ap-row span{display:none} }
 .how{margin:0;padding-left:20px;font-size:14px;line-height:1.6;max-width:46ch}
 .trust{margin-top:-2px}
 @media (max-height:620px){ .trust,.cue{display:none} }
@@ -498,8 +505,15 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
       <div class="about-text">
         <div class="eyebrow">The artist</div>
         <h2>Jomy Johnson</h2>
-        <p>Jomy Johnson is a fine artist in Ahmedabad. She paints in oil on linen and paper, often on a deep dark ground where one pale form comes out of the shadow. She sketches flowers in watercolour straight from life, and draws in coloured pencil, charcoal and graphite.</p>
-        <p>Alongside her paintings she works through the classical Charles Bargue drawing course, copying its plates in charcoal and graphite to train her eye for form and light.</p>
+        <p>Jomy Johnson is a fine artist in Ahmedabad. She paints portraits, still lifes and flowers, in oil on linen and paper and in watercolour, and draws in coloured pencil, charcoal and graphite.</p>
+        <div class="approach" aria-label="Painting approach">
+          <div class="eyebrow">Painting approach</div>
+          <div class="ap-row">
+            <div><b>Out of the dark</b><span>Her oils begin on a deep dark ground. One pale form is brought up out of the shadow, and the rest is left quiet.</span></div>
+            <div><b>From life</b><span>Roses and hibiscus are painted in watercolour straight from life, looking at the real flower.</span></div>
+            <div><b>Drawing first</b><span>She copies the classical Charles Bargue plates in charcoal and graphite, so form and light are right before colour.</span></div>
+          </div>
+        </div>
         <dl class="cv">
           <div><dt>Training</dt><dd>Diploma in Fine Arts, Kanoria Centre for Arts, Ahmedabad, 2022&#8211;23</dd></div>
           <div><dt>Teaching</dt><dd>Assistant class instructor, Kanoria Centre for Arts</dd></div>
