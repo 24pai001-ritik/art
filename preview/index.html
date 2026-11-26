@@ -111,10 +111,10 @@ a{color:inherit}
 .sold{font-size:12px;letter-spacing:.14em;text-transform:uppercase;border:1px solid currentColor;padding:4px 8px;align-self:flex-start}
 
 /* about */
-#v-about{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 18px;gap:clamp(16px,4vw,56px)}
+#v-about{justify-content:center;align-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 18px;gap:clamp(16px,4vw,56px)}
 .about-pic{flex:1.1;min-height:0;min-width:0;display:flex;flex-direction:column;gap:8px}
 .about-pic img{flex:1;min-height:0;width:100%;object-fit:cover}
-.about-text{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2.2vh,22px);max-width:560px}
+.about-text{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2.2vh,22px);max-width:640px}
 .about-text h2{font-family:var(--display);font-weight:300;font-size:clamp(30px,4vw,52px);line-height:1;margin:0}
 .about-text p{margin:0;max-width:60ch}
 .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid var(--line);padding-top:14px}
@@ -490,30 +490,17 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
     </section>
 
     <section class="view" id="v-about" aria-label="About">
-      <div class="about-pic">
-        <div class="closeups">
-          <a href="#grief"><img class="fr f-gilt" src="img/grief-detail.webp" alt="Grief, the brushwork close up"><span>Grief</span></a>
-          <a href="#vacant"><img class="fr f-gilt" src="img/vacant-detail.webp" alt="Vacant, the brushwork close up"><span>Vacant</span></a>
-          <a href="#old-man"><img class="fr f-gilt" src="img/old-man-detail.webp" alt="Old Man, the brushwork close up"><span>Old Man</span></a>
-          <a href="#hibiscus"><img class="fr f-cas" src="img/hibiscus-detail.webp" alt="Live Sketch of Hibiscus, the washes close up"><span>Hibiscus</span></a>
-        </div>
-        <div class="note">Her brushwork, close up. Tap one to see the whole work.</div>
-      </div>
       <div class="about-text">
         <div class="eyebrow">The artist</div>
         <h2>Jomy Johnson</h2>
         <p>Jomy Johnson is a fine artist in Ahmedabad. She paints in oil on linen and paper, often on a deep dark ground where one pale form comes out of the shadow. She sketches flowers in watercolour straight from life, and draws in coloured pencil, charcoal and graphite.</p>
+        <p>Alongside her paintings she works through the classical Charles Bargue drawing course, copying its plates in charcoal and graphite to train her eye for form and light.</p>
         <dl class="cv">
           <div><dt>Training</dt><dd>Diploma in Fine Arts, Kanoria Centre for Arts, Ahmedabad, 2022&#8211;23</dd></div>
           <div><dt>Teaching</dt><dd>Assistant class instructor, Kanoria Centre for Arts</dd></div>
           <div><dt>Mediums</dt><dd>Oil, watercolour, coloured pencil, charcoal, graphite</dd></div>
           <div><dt>Studio</dt><dd>Ahmedabad, Gujarat. Portrait and still-life commissions by request.</dd></div>
         </dl>
-        <div class="steps">
-          <div><b>One of one</b><span>Each original is signed and sold once. When it is sold, it is marked sold here.</span></div>
-          <div><b>Prints by hand</b><span>Jomy checks every print against the painting before it leaves the studio.</span></div>
-          <div><b>Packed with care</b><span>Wrapped in kraft paper with corner guards and sent by tracked courier.</span></div>
-        </div>
       </div>
     </section>
 
