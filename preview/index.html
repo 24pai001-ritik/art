@@ -38,6 +38,12 @@ a{color:inherit}
 .nav a{text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
 .nav a[aria-current="page"]{border-color:currentColor}
 .views{flex:1;min-height:0;position:relative}
+.foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 clamp(16px,3vw,40px);height:clamp(30px,4.5vh,40px);border-top:1px solid var(--line);font-size:12px;letter-spacing:.08em}
+.foot .soc{display:flex;gap:clamp(14px,3vw,26px)}
+.foot .soc a{text-decoration:none;text-transform:uppercase;letter-spacing:.14em;padding:6px 0;border-bottom:1px solid transparent}
+.foot .soc a:hover,.foot .soc a:focus-visible{border-color:currentColor}
+.foot .by{color:var(--muted);font-weight:300;letter-spacing:.1em;white-space:nowrap}
+@media (max-width:380px){.foot{font-size:11px}.foot .soc{gap:12px}}
 .view{position:absolute;inset:0;display:none;min-height:0}
 .view.on{display:flex}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid currentColor;background:transparent;
@@ -533,6 +539,13 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 
     <section class="view" id="v-cart" aria-label="Cart"></section>
   </main>
+  <footer class="foot">
+    <div class="soc">
+      <a href="https://wa.me/919978748249?text=Hello%20Jomy%2C%20I%20saw%20your%20paintings%20on%20your%20website." target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.instagram.com/jomysart/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <span class="by">An Entropy AI creation</span>
+  </footer>
 </div>
 
 <div class="zoom" id="zoom" role="dialog" aria-label="Full view"><img id="zoomImg" alt=""><button class="btn x" type="button">Close</button></div>
