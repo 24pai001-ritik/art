@@ -380,6 +380,10 @@ body{background-color:var(--ground);background-image:var(--tex,none);background-
 :root[data-dir="d"] .f-rip{border-image-source:url(img/tex/frame_ripple.webp);border-image-slice:18.8% 17.7% 20.2% 17.5%}
 :root[data-dir="d"] .f-cas{border-image-source:url(img/tex/frame_cassetta.webp);border-image-slice:20.5%}
 :root[data-dir="d"] .f-rip,:root[data-dir="d"] .f-cas{padding:calc(var(--fw) * .9);background:#EDE5D6}
+:root[data-dir="d"] .fr.f-gilt,:root[data-dir="d"] .fr.f-rip,:root[data-dir="d"] .fr.f-cas{ /* Ritik 26 Nov: every frame takes its painting's own background colour (--fc) */
+  border-image:none;padding:0;background:none;
+  border-color:color-mix(in srgb,var(--fc,#3a3028) 84%,#fff) color-mix(in srgb,var(--fc,#3a3028) 72%,#000) color-mix(in srgb,var(--fc,#3a3028) 60%,#000) color-mix(in srgb,var(--fc,#3a3028) 92%,#fff);
+  outline:1px solid rgba(0,0,0,.4);outline-offset:calc(var(--fw) * -1)}
 :root[data-dir="d"] .home-art,:root[data-dir="d"] .home-tag,:root[data-dir="d"] .home-paint,:root[data-dir="d"] .home-copy h1{display:none}
 :root[data-dir="d"] #v-home{top:calc(-1 * var(--bar));background:linear-gradient(rgba(24,21,19,.38),rgba(24,21,19,.38)),#1C1917 url(img/tex/studio_wall.webp) center/cover no-repeat}
 :root[data-dir="d"] .salon{display:flex;position:absolute;left:0;right:0;top:calc(var(--bar) + 2vh);bottom:clamp(96px,16vh,150px);align-items:center;justify-content:center;gap:clamp(14px,2.6vw,40px);z-index:2}
@@ -592,6 +596,8 @@ function wallFor(slug){
   return {wall: rgbHex(w), ink: dark ? "#EFE9DF" : "#1C1916", line: dark ? "rgba(239,233,223,.25)" : "rgba(28,25,22,.22)"};
 }
 const frameOf = a => "fr " + ({Oil:"f-gilt", Watercolour:"f-cas"}[a.kind] || "f-rip");
+const fcOf = a => (a && (a.edge || EDGE[a.slug])) || "#3a3028";
+function tintStatic(){ document.querySelectorAll('a[href^="#"] > img.fr').forEach(i => { const a = bySlug[i.parentElement.getAttribute("href").slice(1)]; if(a) i.style.setProperty("--fc", fcOf(a)); }); }
 function printSizes(a){ const [w,h] = a.cm, m = Math.max(w,h); return PRINT_LONG.map(p => ({...p, w: Math.round(w/m*p.long), h: Math.round(h/m*p.long)})); }
 function store(k, v){ try{ if(v===undefined) return JSON.parse(localStorage.getItem(k)||"null"); localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
 
@@ -672,7 +678,7 @@ function renderWorks(){
   const g = $("#grid");
   g.style.setProperty("--cols", cols);
   g.style.gridTemplateRows = pages > 1 ? `repeat(${per/cols},minmax(0,1fr))` : "";
-  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" src="${im(a,"-sm")}" alt="${a.title}, ${a.medium}" loading="lazy"></div>
+  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" style="--fc:${fcOf(a)}" src="${im(a,"-sm")}" alt="${a.title}, ${a.medium}" loading="lazy"></div>
     <div class="cap"><i>${a.status==="study" ? a.title.replace("Charles ","") + ", " + a.medium.split(" ")[0].toLowerCase() : a.title}</i><span>${a.status==="sold"?"Sold · prints left":a.status==="study"?"Not for sale":inr(a.price)}</span></div></a>`).join("");
 }
 $("#filters").addEventListener("click", e => { const g = e.target.closest("[data-pg]"); if(g){ page += +g.dataset.pg; renderWorks(); return; }
@@ -685,7 +691,7 @@ function renderWork(slug){
   v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
   if(document.documentElement.dataset.dir){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; } else { document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall; }
   $("#room").classList.remove("reading");
-  const img = $("#workImg"); img.src = im(a); img.className = frameOf(ART.find(x=>x.slug===slug)||{});
+  const img = $("#workImg"); img.src = im(a); img.className = frameOf(ART.find(x=>x.slug===slug)||{}); img.style.setProperty("--fc", fcOf(a));
   const HAS_DETAIL = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"];
   const hasD = a.detail ?? HAS_DETAIL.includes(slug);
   $("#workDetailBox").style.visibility = hasD ? "" : "hidden";
@@ -904,6 +910,6 @@ addEventListener("keydown", e => {
   try{ const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3000);
     const r = await fetch("/api/art", {cache:"no-store", signal:ctl.signal}); clearTimeout(t);
     if(r.ok) applyData(await r.json()); }catch(e){}
-  cart = cart.filter(c => bySlug[c.slug]); saveCart(); setDir(DIR);
+  cart = cart.filter(c => bySlug[c.slug]); saveCart(); tintStatic(); setDir(DIR);
 })();
 </script>
