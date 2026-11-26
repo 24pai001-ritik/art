@@ -59,7 +59,10 @@ function cleanArt(d) {
     if (!(w.price === null || (Number.isInteger(w.price) && w.price >= 0 && w.price <= 1e8))) return null;
     if (w.status === "available" && w.price === null) return null;
     const o = { slug: w.slug, title: w.title.trim(), medium: w.medium.trim(), year: w.year, kind: w.kind, cm: w.cm, price: w.price, status: w.status, prints: !!w.prints };
-    if (typeof w.edge === "string" && /^#[0-9a-f]{6}$/i.test(w.edge)) o.edge = w.edge;
+    if (typeof w.edge === "string" && HEX.test(w.edge)) o.edge = w.edge;
+    /* frame: no fcolor = auto (dark shade of the painting's own ground); ftex missing = the site default */
+    if (w.fcolor !== undefined) { if (!HEX.test(w.fcolor)) return null; o.fcolor = w.fcolor; }
+    if (w.ftex !== undefined) { if (!TEX.includes(w.ftex)) return null; o.ftex = w.ftex; }
     if (w.img !== undefined) { if (!NAME.test(w.img)) return null; o.img = w.img; }
     o.detail = !!w.detail;
     works.push(o);
@@ -69,7 +72,37 @@ function cleanArt(d) {
     if (!p || !str(p.name, 40) || !num(p.long, 5, 300) || !Number.isInteger(p.price) || p.price < 0 || p.price > 1e7) return null;
     prints.push({ name: p.name.trim(), long: p.long, price: p.price });
   }
-  return { works, prints, shipping: Math.round(d.shipping) };
+  const out = { works, prints, shipping: Math.round(d.shipping) };
+  if (d.site !== undefined) { const site = cleanSite(d.site, seen); if (!site) return null; out.site = site; }
+  return out;
+}
+/* site settings edited in the studio: home wall, frames, About text, payment details */
+const HEX = /^#[0-9a-f]{6}$/i, TEX = ["linen", "primed", "plain"], BLOCKS = ["bio", "approach", "cv"];
+const UPI = /^[a-zA-Z0-9._-]{2,256}@[a-zA-Z0-9]{2,64}$/;
+const opt = (v, max) => v === "" || str(v, max);
+const link = v => v === "" || (typeof v === "string" && v.length <= 300 && /^https:\/\/[^\s<>"']+$/.test(v));
+/* Real payments stay OFF until orders are saved and Ritik gives the word (26 Nov 2026). Only this line turns them on. */
+const ALLOW_LIVE_PAY = false;
+function cleanSite(s, slugs) {
+  if (!s || typeof s !== "object") return null;
+  const o = {};
+  if (!Array.isArray(s.home) || s.home.length !== 7 || new Set(s.home).size !== 7 || !s.home.every(h => slugs.has(h))) return null;
+  o.home = s.home.slice();
+  if (!s.frame || !TEX.includes(s.frame.tex)) return null;
+  o.frame = { tex: s.frame.tex };
+  const a = s.about;
+  if (!a || !str(a.name, 40) || !Array.isArray(a.bio) || a.bio.length < 1 || a.bio.length > 2 || !a.bio.every(p => str(p, 420))) return null;
+  if (!a.approach || !str(a.approach.title, 40) || !Array.isArray(a.approach.items) || a.approach.items.length < 1 || a.approach.items.length > 3) return null;
+  if (!a.approach.items.every(i => i && str(i.t, 30) && str(i.d, 170))) return null;
+  if (!Array.isArray(a.cv) || a.cv.length > 5 || !a.cv.every(r => r && str(r.k, 16) && str(r.v, 110))) return null;
+  if (!Array.isArray(a.order) || a.order.length !== 3 || !BLOCKS.every(b => a.order.includes(b))) return null;
+  o.about = { name: a.name.trim(), bio: a.bio.map(p => p.trim()), approach: { title: a.approach.title.trim(), items: a.approach.items.map(i => ({ t: i.t.trim(), d: i.d.trim() })) },
+    cv: a.cv.map(r => ({ k: r.k.trim(), v: r.v.trim() })), order: a.order.slice() };
+  const p = s.pay;
+  if (!p || !(p.upi === "" || (typeof p.upi === "string" && UPI.test(p.upi))) || !opt(p.payee, 60) || !(p.qr === "" || (typeof p.qr === "string" && NAME.test(p.qr)))) return null;
+  if (!Array.isArray(p.methods) || p.methods.length > 3 || !p.methods.every(m => m && str(m.name, 40) && opt(m.text, 200) && link(m.url))) return null;
+  o.pay = { upi: p.upi, payee: p.payee.trim(), qr: p.qr, methods: p.methods.map(m => ({ name: m.name.trim(), text: m.text.trim(), url: m.url })), live: ALLOW_LIVE_PAY && p.live === true };
+  return o;
 }
 function imgType(buf) {
   const b = new Uint8Array(buf.slice(0, 12));
@@ -94,10 +127,11 @@ export default {
     if (!p.startsWith("/api/")) return env.ASSETS.fetch(req);
 
     if (p === "/api/art" && M === "GET") {
-      const d = await store(env).get("art");
-      if (d) return json(d);
-      const seed = await env.ASSETS.fetch(new Request(url.origin + "/data/seed.json"));
-      return json(await seed.json());
+      let d = await store(env).get("art");
+      if (!d) d = await (await env.ASSETS.fetch(new Request(url.origin + "/data/seed.json"))).json();
+      /* payment details are not shown to visitors until real payments are switched on */
+      if (d.site && d.site.pay && !d.site.pay.live && !(await authed(req, env))) d = { ...d, site: { ...d.site, pay: { live: false, methods: [] } } };
+      return json(d);
     }
     if (p === "/api/me" && M === "GET") return json({ ok: await authed(req, env), ready: !!env.ADMIN_PASSWORD });
 

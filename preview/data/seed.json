@@ -162,5 +162,72 @@
    "price": 2400
   }
  ],
- "shipping": 150
+ "shipping": 150,
+ "site": {
+  "home": [
+   "hibiscus",
+   "vacant",
+   "acceptance",
+   "grief",
+   "old-man",
+   "roses",
+   "paper-weight"
+  ],
+  "frame": {
+   "tex": "linen"
+  },
+  "about": {
+   "name": "Jomy Johnson",
+   "bio": [
+    "Jomy Johnson is a fine artist in Ahmedabad. She paints portraits, still lifes and flowers, in oil on linen and paper and in watercolour, and draws in coloured pencil, charcoal and graphite."
+   ],
+   "approach": {
+    "title": "Painting approach",
+    "items": [
+     {
+      "t": "Out of the dark",
+      "d": "Her oils begin on a deep dark ground. One pale form is brought up out of the shadow, and the rest is left quiet."
+     },
+     {
+      "t": "From life",
+      "d": "Roses and hibiscus are painted in watercolour straight from life, looking at the real flower."
+     },
+     {
+      "t": "Drawing first",
+      "d": "She copies the classical Charles Bargue plates in charcoal and graphite, so form and light are right before colour."
+     }
+    ]
+   },
+   "cv": [
+    {
+     "k": "Training",
+     "v": "Diploma in Fine Arts, Kanoria Centre for Arts, Ahmedabad, 2022–23"
+    },
+    {
+     "k": "Teaching",
+     "v": "Assistant class instructor, Kanoria Centre for Arts"
+    },
+    {
+     "k": "Mediums",
+     "v": "Oil, watercolour, coloured pencil, charcoal, graphite"
+    },
+    {
+     "k": "Studio",
+     "v": "Ahmedabad, Gujarat. Portrait and still-life commissions by request."
+    }
+   ],
+   "order": [
+    "bio",
+    "approach",
+    "cv"
+   ]
+  },
+  "pay": {
+   "upi": "",
+   "payee": "",
+   "qr": "",
+   "methods": [],
+   "live": false
+  }
+ }
 }
