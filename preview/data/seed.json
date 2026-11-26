@@ -1,0 +1,166 @@
+{
+ "works": [
+  {
+   "slug": "grief",
+   "title": "Grief",
+   "medium": "Oil on linen",
+   "year": 2026,
+   "kind": "Oil",
+   "cm": [
+    21,
+    19
+   ],
+   "price": 24000,
+   "status": "available",
+   "prints": true,
+   "edge": "#232026",
+   "detail": true
+  },
+  {
+   "slug": "vacant",
+   "title": "Vacant",
+   "medium": "Oil on linen",
+   "year": 2026,
+   "kind": "Oil",
+   "cm": [
+    21,
+    19.5
+   ],
+   "price": 22000,
+   "status": "available",
+   "prints": true,
+   "edge": "#2a201f",
+   "detail": true
+  },
+  {
+   "slug": "old-man",
+   "title": "Old Man",
+   "medium": "Oil on paper",
+   "year": 2026,
+   "kind": "Oil",
+   "cm": [
+    15,
+    21
+   ],
+   "price": 14000,
+   "status": "available",
+   "prints": true,
+   "edge": "#563b33",
+   "detail": true
+  },
+  {
+   "slug": "paper-weight",
+   "title": "Paper Weight",
+   "medium": "Oil on paper",
+   "year": 2025,
+   "kind": "Oil",
+   "cm": [
+    17.5,
+    21
+   ],
+   "price": 9000,
+   "status": "sold",
+   "prints": true,
+   "edge": "#b68065",
+   "detail": true
+  },
+  {
+   "slug": "roses",
+   "title": "Live Sketch of Roses",
+   "medium": "Watercolour on paper",
+   "year": 2025,
+   "kind": "Watercolour",
+   "cm": [
+    18,
+    21
+   ],
+   "price": 7500,
+   "status": "available",
+   "prints": true,
+   "edge": "#bdb7bc",
+   "detail": true
+  },
+  {
+   "slug": "hibiscus",
+   "title": "Live Sketch of Hibiscus",
+   "medium": "Watercolour on paper",
+   "year": 2025,
+   "kind": "Watercolour",
+   "cm": [
+    21,
+    19
+   ],
+   "price": 7000,
+   "status": "available",
+   "prints": true,
+   "edge": "#d1d5ce",
+   "detail": true
+  },
+  {
+   "slug": "acceptance",
+   "title": "Acceptance",
+   "medium": "Coloured pencils on paper",
+   "year": 2026,
+   "kind": "Drawing",
+   "cm": [
+    16,
+    21
+   ],
+   "price": 8500,
+   "status": "available",
+   "prints": true,
+   "edge": "#d1cbc3",
+   "detail": true
+  },
+  {
+   "slug": "bargue-charcoal",
+   "title": "Charles Bargue Study",
+   "medium": "Charcoal on paper",
+   "year": 2026,
+   "kind": "Drawing",
+   "cm": [
+    16,
+    21
+   ],
+   "price": null,
+   "status": "study",
+   "prints": false,
+   "edge": "#999893",
+   "detail": false
+  },
+  {
+   "slug": "bargue-graphite",
+   "title": "Charles Bargue Study",
+   "medium": "Graphite on paper",
+   "year": 2025,
+   "kind": "Drawing",
+   "cm": [
+    17,
+    21
+   ],
+   "price": null,
+   "status": "study",
+   "prints": false,
+   "edge": "#c8c9bf",
+   "detail": false
+  }
+ ],
+ "prints": [
+  {
+   "name": "A5, true size",
+   "long": 21,
+   "price": 900
+  },
+  {
+   "name": "A4",
+   "long": 30,
+   "price": 1400
+  },
+  {
+   "name": "A3",
+   "long": 42,
+   "price": 2400
+  }
+ ],
+ "shipping": 150
+}

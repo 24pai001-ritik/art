@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Studio · Jomy Johnson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&display=swap">
+<style>
+:root{--ground:#1C1917;--ink:#F2E6D8;--muted:#BBAA95;--line:rgba(242,230,216,.2);--field:rgba(242,230,216,.07);--ochre:#D9963F;--bad:#E07A62;--ok:#8DBF8B;
+  --display:"Cormorant Garamond",Georgia,serif;--text:"Newsreader",Georgia,serif;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{height:100dvh;overflow:hidden;background:linear-gradient(rgba(24,21,19,.9),rgba(24,21,19,.9)),url(img/tex/plaster.webp) center/cover,var(--ground);color:var(--ink);font:15px/1.4 var(--text);display:flex;flex-direction:column}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.screen{display:none;flex:1;min-height:0;flex-direction:column;padding:clamp(10px,2.2vh,22px) clamp(16px,3vw,40px);gap:clamp(8px,1.6vh,16px)}
+.screen.on{display:flex}
+h1{font:600 clamp(22px,3.4vh,30px)/1.1 var(--display);letter-spacing:.14em;text-transform:uppercase}
+h2{font:600 clamp(20px,3vh,26px)/1.1 var(--display);letter-spacing:.06em}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.btn{border:1px solid var(--line);background:none;padding:9px 16px;border-radius:2px;letter-spacing:.06em;min-height:42px}
+.btn.main{background:var(--ochre);border-color:var(--ochre);color:#1C1917;font-weight:600}
+.btn.bad{color:var(--bad);border-color:rgba(224,122,98,.45)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-current]{border-color:var(--ochre);color:var(--ochre)}
+a{color:var(--ochre)}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#topbar.on{flex-direction:row}
+.bar h1{margin-right:auto}
+.bar .btn{padding:6px 12px;min-height:36px;font-size:14px}
+
+/* login */
+#login{align-items:center;justify-content:center;text-align:center}
+#login form{display:flex;flex-direction:column;gap:12px;width:min(340px,100%)}
+#login input{background:var(--field);border:1px solid var(--line);padding:12px;border-radius:2px;text-align:center;font-size:17px}
+.msg{min-height:1.4em;color:var(--bad);font-size:14px}
+
+/* paintings list */
+.listhead{display:flex;align-items:center;gap:10px}
+.listhead p{margin-right:auto;color:var(--muted);font-size:14px}
+.pager{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px}
+.pager .btn{min-height:34px;padding:4px 12px}
+.tiles{flex:1;min-height:0;display:grid;gap:clamp(8px,1.4vw,16px);grid-template-columns:repeat(var(--c),minmax(0,1fr));grid-template-rows:repeat(var(--r),minmax(0,1fr))}
+.tile{min-height:0;display:flex;flex-direction:column;gap:4px;background:none;border:1px solid transparent;padding:6px;text-align:left;border-radius:2px}
+.tile:hover,.tile:focus-visible{border-color:var(--line)}
+.tile .pic{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.tile img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.tile .t{font:600 15px/1.2 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .p{font-size:13px;color:var(--muted)}
+.tile .p b{color:var(--ochre);font-weight:500}
+.tile.add{border:1px dashed var(--line);align-items:center;justify-content:center;text-align:center;color:var(--ochre)}
+.tile.add span{font:600 clamp(16px,2.4vh,20px)/1.2 var(--display)}
+
+/* edit one painting */
+.edit{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(12px,3vw,40px)}
+.photo{min-height:0;display:flex;flex-direction:column;gap:8px}
+.photo .pic{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;border:1px dashed var(--line);border-radius:2px;padding:8px}
+.photo img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.photo .pic p{color:var(--muted);text-align:center;padding:10px}
+.photo label.btn{text-align:center;display:flex;align-items:center;justify-content:center}
+.photo input{position:absolute;width:1px;height:1px;opacity:0}
+form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6px,1.3vh,12px) 12px;align-content:start}
+.f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.f.full{grid-column:1/-1}
+.f span{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.f input,.f select{background:var(--field);border:1px solid var(--line);border-radius:2px;padding:clamp(6px,1.1vh,10px) 10px;min-width:0;width:100%}
+.f select option{background:#1C1917}
+.f input:focus,.f select:focus{outline:2px solid var(--ochre);outline-offset:0}
+.f.check{flex-direction:row;align-items:center;gap:10px}
+.f.check input{width:22px;height:22px;accent-color:var(--ochre)}
+.f.check span{text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink)}
+.actions{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.actions .grow{margin-left:auto}
+.hint{grid-column:1/-1;font-size:13px;color:var(--muted)}
+
+/* print prices */
+.prices{flex:1;min-height:0;display:flex;flex-direction:column;gap:clamp(8px,1.6vh,14px);max-width:620px}
+.prow{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:10px}
+
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#2A2420;border:1px solid var(--line);padding:10px 18px;border-radius:2px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1}
+.toast.bad{border-color:var(--bad);color:var(--bad)}
+
+@media (max-width:700px){
+  .bar h1{font-size:20px;width:100%}
+  .bar .btn{padding:4px 10px;font-size:13px;min-height:34px}
+  .edit{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+  .photo{flex-direction:row;align-items:stretch}
+  .photo .pic{flex:1}
+  .photo label.btn{width:38%}
+  form.fields{gap:6px 10px}
+  .prow{grid-template-columns:1.3fr 1fr 1fr}
+  .listhead p{display:none}
+}
+@media (max-height:560px){ .photo .pic{display:none} .edit{grid-template-rows:auto auto} .hint{display:none} }
+</style>
+</head>
+<body>
+
+<section class="screen" id="login" aria-labelledby="lh">
+  <p class="eyebrow">Jomy Johnson</p>
+  <h1 id="lh">Studio</h1>
+  <form id="loginForm">
+    <input type="password" id="pw" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
+    <button class="btn main" type="submit">Open the studio</button>
+    <p class="msg" id="loginMsg" role="alert"></p>
+  </form>
+  <a href="/">Back to the website</a>
+</section>
+
+<header class="bar screen" id="topbar" style="flex:none;padding-bottom:0">
+  <h1>Studio</h1>
+  <button class="btn" type="button" data-go="list">Paintings</button>
+  <button class="btn" type="button" data-go="prices">Print prices</button>
+  <a class="btn" href="/#works" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center">View site</a>
+  <button class="btn" type="button" id="logout">Log out</button>
+</header>
+
+<section class="screen" id="list" aria-label="Paintings">
+  <div class="listhead"><p>Tap a painting to change its price or details.</p><div class="pager" id="pager"></div></div>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section class="screen" id="edit" aria-labelledby="eh">
+  <h2 id="eh">New painting</h2>
+  <div class="edit">
+    <div class="photo">
+      <div class="pic" id="pic"><p>Add a clear, straight photo of the painting, without the frame.</p></div>
+      <label class="btn" for="file" id="fileLbl">Choose photo</label>
+      <input type="file" id="file" accept="image/*">
+    </div>
+    <form class="fields" id="form" novalidate>
+      <label class="f full"><span>Title</span><input id="title" maxlength="120" required></label>
+      <label class="f full"><span>Medium</span><input id="medium" maxlength="120" placeholder="Oil on linen" required></label>
+      <label class="f"><span>Type</span><select id="kind"><option>Oil</option><option>Watercolour</option><option>Drawing</option></select></label>
+      <label class="f"><span>Year</span><input id="year" type="number" inputmode="numeric" min="1900" max="2100"></label>
+      <label class="f"><span>Width, cm</span><input id="w" type="number" inputmode="decimal" step="0.5" min="1"></label>
+      <label class="f"><span>Height, cm</span><input id="h" type="number" inputmode="decimal" step="0.5" min="1"></label>
+      <label class="f"><span>Original</span><select id="status"><option value="available">For sale</option><option value="sold">Sold</option><option value="study">Not for sale</option></select></label>
+      <label class="f"><span>Price, ₹</span><input id="price" type="number" inputmode="numeric" min="0" step="100"></label>
+      <label class="f check full"><input type="checkbox" id="prints"><span>Sell prints of this painting</span></label>
+      <p class="hint" id="hint">Changes show on the website as soon as you save.</p>
+      <div class="actions">
+        <button class="btn main" type="submit" id="save">Save</button>
+        <button class="btn" type="button" data-go="list">Cancel</button>
+        <button class="btn bad grow" type="button" id="del">Delete</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="screen" id="prices" aria-labelledby="ph">
+  <h2 id="ph">Print prices</h2>
+  <form class="prices" id="pform" novalidate>
+    <div class="prow f"><span>Size name</span><span>Long side, cm</span><span>Price, ₹</span></div>
+    <div id="prows" style="display:flex;flex-direction:column;gap:inherit"></div>
+    <label class="f" style="max-width:240px"><span>Courier fee per order, ₹</span><input id="ship" type="number" inputmode="numeric" min="0" step="10"></label>
+    <p class="hint">Each print keeps the painting's shape; the long side is the size you set here.</p>
+    <div class="actions" style="justify-content:flex-start"><button class="btn main" type="submit">Save prices</button></div>
+  </form>
+</section>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const inr = n => "₹" + Number(n).toLocaleString("en-IN");
+const ON_HOME = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"]; /* hung on the home wall / about page */
+let data = null, screen = "login", page = 0, cur = null, pick = null;
+
+function toast(t, bad){ const e = $("#toast"); e.textContent = t; e.className = "toast on" + (bad ? " bad" : ""); clearTimeout(e._t); e._t = setTimeout(() => e.className = "toast", bad ? 5000 : 2600); }
+async function api(path, opt = {}){
+  const r = await fetch(path, {credentials:"same-origin", cache:"no-store", ...opt, headers:{"x-studio":"1", ...(opt.headers||{})}});
+  let j = {}; try{ j = await r.json(); }catch(e){}
+  if(r.status === 401 && path !== "/api/login"){ show("login"); throw new Error("Please log in again."); }
+  if(!r.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  return j;
+}
+function show(s){
+  screen = s;
+  document.querySelectorAll(".screen").forEach(e => e.classList.toggle("on", e.id === s || (e.id === "topbar" && s !== "login")));
+  document.querySelectorAll("[data-go]").forEach(b => b.toggleAttribute("aria-current", b.dataset.go === s || (s==="edit" && b.dataset.go==="list" && b.closest(".bar"))));
+  if(s === "list") drawList();
+  if(s === "prices") drawPrices();
+}
+document.addEventListener("click", e => { const g = e.target.closest("[data-go]"); if(g) show(g.dataset.go); });
+
+/* ---------- login ---------- */
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault(); $("#loginMsg").textContent = "";
+  try{ await api("/api/login", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({password:$("#pw").value})});
+    $("#pw").value = ""; await load(); show("list"); }
+  catch(err){ $("#loginMsg").textContent = err.message; }
+});
+$("#logout").addEventListener("click", async () => { try{ await api("/api/logout", {method:"POST"}); }catch(e){} show("login"); });
+async function load(){ data = await (await fetch("/api/art", {cache:"no-store"})).json(); }
+
+/* ---------- paintings list ---------- */
+const src = (a, suf="-sm") => `img/${a.img || a.slug}${suf}.webp`;
+function drawList(){
+  const w = innerWidth, h = innerHeight;
+  const c = w < 520 ? 3 : w < 900 ? 4 : 6, r = h < 600 ? 2 : h < 900 ? 3 : 3;
+  const per = c * r - 1, pages = Math.max(1, Math.ceil(data.works.length / per));
+  page = Math.min(page, pages - 1);
+  const t = $("#tiles"); t.style.setProperty("--c", c); t.style.setProperty("--r", r);
+  const items = data.works.slice(page*per, page*per + per);
+  t.innerHTML = `<button class="tile add" type="button" data-new><span>+ Add a painting</span></button>` + items.map(a => `
+    <button class="tile" type="button" data-slug="${a.slug}"><div class="pic"><img src="${src(a)}" alt=""></div>
+    <div class="t">${esc(a.title)}</div><div class="p">${a.status==="sold" ? "Sold" : a.status==="study" ? "Not for sale" : `<b>${inr(a.price)}</b>`}${a.prints ? " · prints" : ""}</div></button>`).join("");
+  $("#pager").innerHTML = pages > 1 ? `<button class="btn" type="button" data-pg="-1" ${page?"":"disabled"} aria-label="Previous page">‹</button><span>${page+1} / ${pages}</span><button class="btn" type="button" data-pg="1" ${page<pages-1?"":"disabled"} aria-label="Next page">›</button>` : "";
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("#pager").addEventListener("click", e => { const b = e.target.closest("[data-pg]"); if(b){ page += +b.dataset.pg; drawList(); } });
+$("#tiles").addEventListener("click", e => { const b = e.target.closest(".tile"); if(!b) return; openEdit(b.dataset.slug ? data.works.find(a => a.slug === b.dataset.slug) : null); });
+
+/* ---------- edit one painting ---------- */
+function openEdit(a){
+  cur = a; pick = null; $("#file").value = "";
+  $("#eh").textContent = a ? a.title : "New painting";
+  $("#pic").innerHTML = a ? `<img src="${src(a, "")}" alt="">` : `<p>Add a clear, straight photo of the painting, without the frame.</p>`;
+  $("#fileLbl").textContent = a ? "Change photo" : "Choose photo";
+  $("#title").value = a ? a.title : ""; $("#medium").value = a ? a.medium : "";
+  $("#kind").value = a ? a.kind : "Oil"; $("#year").value = a ? a.year : new Date().getFullYear();
+  $("#w").value = a ? a.cm[0] : ""; $("#h").value = a ? a.cm[1] : "";
+  $("#status").value = a ? a.status : "available"; $("#price").value = a && a.price != null ? a.price : "";
+  $("#prints").checked = a ? a.prints : true;
+  $("#del").hidden = !a; syncPrice();
+  show("edit");
+}
+function syncPrice(){ const s = $("#status").value; $("#price").disabled = s === "study"; if(s === "study") $("#price").value = ""; }
+$("#status").addEventListener("change", syncPrice);
+
+/* photo: resized here in the browser, so the upload is small */
+function canvasOf(bmp, long){ const k = Math.min(1, long / Math.max(bmp.width, bmp.height)); const c = document.createElement("canvas");
+  c.width = Math.round(bmp.width*k); c.height = Math.round(bmp.height*k); c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height); return c; }
+async function blobOf(c, q){
+  for(let qq = q; qq > .4; qq -= .12){
+    let b = await new Promise(r => c.toBlob(r, "image/webp", qq));
+    if(!b || b.type !== "image/webp") b = await new Promise(r => c.toBlob(r, "image/jpeg", qq)); /* Safari cannot make WebP */
+    if(b && b.size < 1.8e6) return b;
+  }
+  throw new Error("That photo is too large. Try a smaller one.");
+}
+function edgeOf(c){ const x = c.getContext("2d"), d = x.getImageData(0, 0, c.width, c.height).data, W = c.width, H = c.height, m = Math.max(2, Math.round(Math.min(W,H)*.04));
+  let r=0,g=0,b=0,n=0; for(let y=0;y<H;y+=2) for(let xx=0;xx<W;xx+=2){ if(xx>m && xx<W-m && y>m && y<H-m) continue; const i=(y*W+xx)*4; r+=d[i]; g+=d[i+1]; b+=d[i+2]; n++; }
+  return "#" + [r,g,b].map(v => Math.round(v/n).toString(16).padStart(2,"0")).join(""); }
+$("#file").addEventListener("change", async () => {
+  const f = $("#file").files[0]; if(!f) return;
+  try{
+    const bmp = await createImageBitmap(f, {imageOrientation:"from-image"});
+    const big = canvasOf(bmp, 1600), sm = canvasOf(bmp, 640);
+    pick = {big: await blobOf(big, .86), sm: await blobOf(sm, .82), edge: edgeOf(sm), ratio: bmp.width / bmp.height};
+    $("#pic").innerHTML = `<img src="${URL.createObjectURL(pick.sm)}" alt="">`;
+    if(!$("#w").value && !$("#h").value){ /* most of her works are about A5: long side 21 cm */
+      const r = pick.ratio; $("#w").value = r >= 1 ? 21 : Math.round(21*r*2)/2; $("#h").value = r >= 1 ? Math.round(21/r*2)/2 : 21; }
+  }catch(err){ pick = null; toast(err.message || "That photo could not be read.", true); }
+});
+
+const slugify = s => s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50) || "painting";
+const tag = () => Date.now().toString(36);
+async function putImg(name, blob){ await api("/api/img/" + name, {method:"PUT", headers:{"content-type":blob.type}, body:blob}); }
+async function saveArt(next){ await api("/api/art", {method:"PUT", headers:{"content-type":"application/json"}, body:JSON.stringify(next)}); data = next; }
+
+$("#form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const num = id => $(id).value === "" ? NaN : Number($(id).value);
+  const w = {
+    title: $("#title").value.trim(), medium: $("#medium").value.trim(), kind: $("#kind").value, year: Math.round(num("#year")),
+    cm: [num("#w"), num("#h")], status: $("#status").value, price: $("#status").value === "study" || $("#price").value === "" ? null : Math.round(num("#price")), prints: $("#prints").checked,
+  };
+  const miss = !w.title ? "a title" : !w.medium ? "the medium" : !(w.year >= 1900 && w.year <= 2100) ? "the year" : !(w.cm[0] > 0 && w.cm[1] > 0) ? "the size" : (w.status === "available" && !(w.price >= 0)) ? "the price" : (!cur && !pick) ? "a photo" : "";
+  if(miss) return toast("Please add " + miss + ".", true);
+  $("#save").disabled = true; $("#save").textContent = "Saving…";
+  try{
+    const next = structuredClone(data);
+    let row, oldImg = null;
+    if(cur){ row = next.works.find(a => a.slug === cur.slug); oldImg = row.img || null; }
+    else { row = {slug: slugify(w.title) + "-" + tag().slice(-4), detail: false}; next.works.unshift(row); }
+    Object.assign(row, w);
+    if(pick){
+      const name = row.slug + "-" + tag();
+      await putImg(name, pick.big); await putImg(name + "-sm", pick.sm);
+      row.img = name; row.edge = pick.edge; row.detail = false;
+    }
+    await saveArt(next);
+    if(pick && oldImg){ api("/api/img/" + oldImg, {method:"DELETE"}).catch(()=>{}); api("/api/img/" + oldImg + "-sm", {method:"DELETE"}).catch(()=>{}); }
+    toast(cur ? "Saved. The website shows it now." : "Added. It is on the website now.");
+    if(!cur) page = 0;
+    show("list");
+  }catch(err){ toast(err.message, true); }
+  finally{ $("#save").disabled = false; $("#save").textContent = "Save"; }
+});
+
+$("#del").addEventListener("click", async () => {
+  if(!cur) return;
+  if(ON_HOME.includes(cur.slug)) return toast("This one hangs on the home wall, so it cannot be deleted. Mark it Sold or Not for sale instead.", true);
+  if(!confirm(`Delete "${cur.title}" from the website? This cannot be undone.`)) return;
+  try{
+    const next = structuredClone(data); next.works = next.works.filter(a => a.slug !== cur.slug);
+    await saveArt(next);
+    if(cur.img){ api("/api/img/" + cur.img, {method:"DELETE"}).catch(()=>{}); api("/api/img/" + cur.img + "-sm", {method:"DELETE"}).catch(()=>{}); }
+    toast("Deleted."); show("list");
+  }catch(err){ toast(err.message, true); }
+});
+
+/* ---------- print prices ---------- */
+function drawPrices(){
+  $("#prows").innerHTML = data.prints.map((p, i) => `<div class="prow">
+    <label class="f"><input data-i="${i}" data-k="name" value="${esc(p.name)}" aria-label="Size name ${i+1}" maxlength="40"></label>
+    <label class="f"><input data-i="${i}" data-k="long" type="number" inputmode="decimal" min="5" value="${p.long}" aria-label="Long side in cm ${i+1}"></label>
+    <label class="f"><input data-i="${i}" data-k="price" type="number" inputmode="numeric" min="0" step="50" value="${p.price}" aria-label="Price ${i+1}"></label></div>`).join("");
+  $("#ship").value = data.shipping;
+}
+$("#pform").addEventListener("submit", async e => {
+  e.preventDefault();
+  const next = structuredClone(data);
+  document.querySelectorAll("#prows input").forEach(inp => { const p = next.prints[inp.dataset.i]; p[inp.dataset.k] = inp.dataset.k === "name" ? inp.value.trim() : Number(inp.value); });
+  next.shipping = Math.round(Number($("#ship").value));
+  if(next.prints.some(p => !p.name || !(p.long >= 5) || !(p.price >= 0)) || !(next.shipping >= 0)) return toast("Please fill every box.", true);
+  next.prints.forEach(p => p.price = Math.round(p.price));
+  try{ await saveArt(next); toast("Prices saved. The website shows them now."); }catch(err){ toast(err.message, true); }
+});
+
+let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if(screen === "list") drawList(); }, 120); });
+
+/* start: already logged in? */
+(async () => {
+  try{
+    const me = await (await fetch("/api/me", {cache:"no-store"})).json();
+    if(!me.ready) $("#loginMsg").textContent = "The studio password has not been set up yet.";
+    if(me.ok){ await load(); show("list"); return; }
+  }catch(e){ $("#loginMsg").textContent = "Could not reach the website. Check the internet and reload."; }
+  show("login");
+})();
+</script>
+</body>
+</html>

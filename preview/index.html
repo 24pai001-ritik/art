@@ -70,6 +70,8 @@ a{color:inherit}
 .chip{border:1px solid var(--line);background:transparent;padding:6px 12px;font-size:12px;cursor:pointer;border-radius:999px}
 .chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--ground)}
 .grid{flex:1;min-height:0;display:grid;gap:clamp(8px,1.6vw,22px);grid-template-columns:repeat(var(--cols,5),minmax(0,1fr));grid-auto-rows:minmax(0,1fr)}
+.pager{display:inline-flex;align-items:center;gap:6px;margin-left:auto;font-size:13px;color:var(--muted)}
+.pager .chip:disabled{opacity:.35;cursor:default}
 .tile{min-height:0;display:flex;flex-direction:column;gap:6px;text-decoration:none;cursor:pointer;background:none;border:0;padding:0;text-align:left}
 .tile .frame{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:var(--panel);padding:clamp(6px,1.2vw,16px)}
 .tile img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 6px 16px rgba(0,0,0,.18);transition:transform .35s}
@@ -566,7 +568,7 @@ const ART = [
 /* wall colour sampled from each work's own edges (preview/img/_meta.json) */
 const EDGE = {"grief":"#232026","vacant":"#2a201f","old-man":"#563b33","paper-weight":"#b68065","roses":"#bdb7bc","hibiscus":"#d1d5ce","acceptance":"#d1cbc3","bargue-charcoal":"#999893","bargue-graphite":"#c8c9bf"};
 const PRINT_LONG = [{name:"A5, true size", long:21, price:900},{name:"A4", long:30, price:1400},{name:"A3", long:42, price:2400}];
-const SHIPPING = 150;
+let SHIPPING = 150;
 /* sample rooms: furniture of known width gives pixels per cm (measured on each photo) */
 const ROOMS = [
   {id:"room_living", label:"Living room", src:"img/room_living.webp", known:"sofa", cm:200, px:[252,963], anchor:[607,330]},
@@ -579,6 +581,15 @@ const GALLERY = {src:"img/gallery_wall.webp", cm:150, px:[481,902], anchor:[695,
 const $ = s => document.querySelector(s);
 const inr = n => "₹" + n.toLocaleString("en-IN");
 const bySlug = Object.fromEntries(ART.map(a => [a.slug, a]));
+const im = (a, suf = "") => `img/${a.img || a.slug}${suf}.webp`;
+/* live data from the studio dashboard (/api/art); the lists above are the offline fallback */
+function applyData(d){
+  if(!d || !Array.isArray(d.works) || !d.works.length) return;
+  ART.splice(0, ART.length, ...d.works);
+  Object.keys(bySlug).forEach(k => delete bySlug[k]); ART.forEach(a => { bySlug[a.slug] = a; if(a.edge) EDGE[a.slug] = a.edge; });
+  if(Array.isArray(d.prints) && d.prints.length) PRINT_LONG.splice(0, PRINT_LONG.length, ...d.prints);
+  if(typeof d.shipping === "number") SHIPPING = d.shipping;
+}
 const imgCache = {};
 function loadImg(src){ return imgCache[src] ||= new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; }); }
 function hexRgb(h){ const n = parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
@@ -659,19 +670,26 @@ async function drawHome(){
 }
 
 /* ---------- works grid ---------- */
-let filter = "All";
+let filter = "All", page = 0;
 function renderWorks(){
   const kinds = ["All","Oil","Watercolour","Drawing"];
-  $("#filters").innerHTML = kinds.map(k => `<button class="chip" type="button" aria-pressed="${k===filter}" data-k="${k}">${k}</button>`).join("");
-  const list = ART.filter(a => filter==="All" || a.kind===filter);
-  const g = $("#grid");
+  const all = ART.filter(a => filter==="All" || a.kind===filter);
   const wide = innerWidth > 1000, phone = innerWidth <= 640;
-  const cols = phone ? 3 : wide ? Math.min(5, Math.max(3, Math.ceil(list.length/2))) : 3;
+  const cols = phone ? 3 : wide ? Math.min(5, Math.max(3, Math.ceil(all.length/2))) : 3;
+  /* more works than fit: pages, never a scroll */
+  const per = cols * (phone ? (innerHeight < 700 ? 3 : 4) : wide ? 2 : 3), pages = Math.max(1, Math.ceil(all.length/per));
+  page = Math.min(page, pages-1);
+  const list = all.slice(page*per, page*per + per);
+  $("#filters").innerHTML = kinds.map(k => `<button class="chip" type="button" aria-pressed="${k===filter}" data-k="${k}">${k}</button>`).join("")
+    + (pages > 1 ? `<span class="pager"><button class="chip" type="button" data-pg="-1" aria-label="Previous page"${page?"":" disabled"}>‹</button><span>${page+1} / ${pages}</span><button class="chip" type="button" data-pg="1" aria-label="Next page"${page<pages-1?"":" disabled"}>›</button></span>` : "");
+  const g = $("#grid");
   g.style.setProperty("--cols", cols);
-  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" src="img/${a.slug}-sm.webp" alt="${a.title}, ${a.medium}" loading="lazy"></div>
+  g.style.gridTemplateRows = pages > 1 ? `repeat(${per/cols},minmax(0,1fr))` : "";
+  g.innerHTML = list.map(a => `<a class="tile" href="#${a.slug}"><div class="frame"><img class="${frameOf(a)}" src="${im(a,"-sm")}" alt="${a.title}, ${a.medium}" loading="lazy"></div>
     <div class="cap"><i>${a.status==="study" ? a.title.replace("Charles ","") + ", " + a.medium.split(" ")[0].toLowerCase() : a.title}</i><span>${a.status==="sold"?"Sold · prints left":a.status==="study"?"Not for sale":inr(a.price)}</span></div></a>`).join("");
 }
-$("#filters").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if(!b) return; filter = b.dataset.k; renderWorks(); });
+$("#filters").addEventListener("click", e => { const g = e.target.closest("[data-pg]"); if(g){ page += +g.dataset.pg; renderWorks(); return; }
+  const b = e.target.closest("[data-k]"); if(!b) return; filter = b.dataset.k; page = 0; renderWorks(); });
 
 /* ---------- single work ---------- */
 let current = null, buyTab = "original", printPick = 1;
@@ -680,10 +698,11 @@ function renderWork(slug){
   v.style.setProperty("--wall", t.wall); v.style.setProperty("--wall-ink", t.ink); v.style.setProperty("--wall-line", t.line);
   if(document.documentElement.dataset.dir){ document.documentElement.style.removeProperty("--bar-ink"); document.body.style.background = ""; } else { document.documentElement.style.setProperty("--bar-ink", t.ink); document.body.style.background = t.wall; }
   $("#room").classList.remove("reading");
-  const img = $("#workImg"); img.src = `img/${slug}.webp`; img.className = frameOf(ART.find(x=>x.slug===slug)||{});
+  const img = $("#workImg"); img.src = im(a); img.className = frameOf(ART.find(x=>x.slug===slug)||{});
   const HAS_DETAIL = ["grief","vacant","old-man","paper-weight","roses","hibiscus","acceptance"];
-  $("#workDetailBox").style.visibility = HAS_DETAIL.includes(slug) ? "" : "hidden";
-  if(HAS_DETAIL.includes(slug)) $("#workDetail").src = `img/${slug}-detail.webp`;
+  const hasD = a.detail ?? HAS_DETAIL.includes(slug);
+  $("#workDetailBox").style.visibility = hasD ? "" : "hidden";
+  if(hasD) $("#workDetail").src = `img/${slug}-detail.webp`;
   v.style.setProperty("--edge", EDGE[slug]); img.alt = `${a.title}, ${a.medium}, ${a.year}`;
   $("#workTitle").textContent = a.title;
   $("#workFacts").innerHTML = `${a.year}<br>${a.medium}<br>${a.cm[0]} × ${a.cm[1]} cm <span class="cue">· real size about A5, a notebook page</span>`;
@@ -737,7 +756,7 @@ function renderCart(){
   if(orderState){ renderPay(v); return; }
   if(!cart.length){ v.innerHTML = `<div class="empty"><div class="eyebrow">Cart</div><p>Nothing here yet.</p><ol class="how"><li>Pick an original or a print.</li><li>Pay by UPI with the QR made for your order.</li><li>Jomy checks the payment, then packs and sends it by tracked courier.</li></ol><a class="btn solid" href="#works">See the works</a></div>`; return; }
   const sub = cart.reduce((s,c)=>s+c.price,0), maxShow = innerHeight < 700 ? 2 : 4;
-  const rows = cart.slice(0,maxShow).map((c,i)=>{ const a = bySlug[c.slug]; return `<div class="line"><img src="img/${a.slug}-sm.webp" alt=""><div><i>${a.title}</i><div class="meta">${c.label}</div></div>
+  const rows = cart.slice(0,maxShow).map((c,i)=>{ const a = bySlug[c.slug]; return `<div class="line"><img src="${im(a,"-sm")}" alt=""><div><i>${a.title}</i><div class="meta">${c.label}</div></div>
     <div class="r">${inr(c.price)}<br><button class="linkish" type="button" data-rm="${i}">Remove</button></div></div>`; }).join("");
   const more = cart.length > maxShow ? `<div class="note">and ${cart.length-maxShow} more</div>` : "";
   v.innerHTML = `<div class="cart-list"><h2>Your cart</h2>${rows}${more}
@@ -785,7 +804,7 @@ const W = {art:null, artImg:null, room:null, roomImg:null, sizeIdx:-1, frame:"no
 function wallSizes(a){ const s = a.prints ? printSizes(a).map(p=>({label:`${p.name} ${p.w} × ${p.h}`, w:p.w, h:p.h, i:PRINT_LONG.indexOf(PRINT_LONG.find(x=>x.name===p.name))})) : [];
   return (a.status==="available" ? [{label:`Original ${a.cm[0]} × ${a.cm[1]}`, w:a.cm[0], h:a.cm[1], i:-1}] : []).concat(s); }
 async function openWall(a, sizeIdx){
-  W.art = a; W.sizeIdx = sizeIdx; W.artImg = await loadImg(`img/${a.slug}.webp`);
+  W.art = a; W.sizeIdx = sizeIdx; W.artImg = await loadImg(im(a));
   if(sizeIdx===-1 && a.status!=="available") W.sizeIdx = 1;
   $("#wallTitle").innerHTML = `<i>${a.title}</i> on a wall`;
   $("#wall").classList.add("on");
@@ -894,5 +913,10 @@ addEventListener("keydown", e => {
   if(e.key==="Escape"){ $("#zoom").classList.remove("on"); $("#wall").classList.remove("on"); }
   if(current && $("#v-work").classList.contains("on") && !$("#wall").classList.contains("on")){ if(e.key==="ArrowRight") step(1); if(e.key==="ArrowLeft") step(-1); }
 });
-saveCart(); setDir(DIR);
+(async () => {
+  try{ const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3000);
+    const r = await fetch("/api/art", {cache:"no-store", signal:ctl.signal}); clearTimeout(t);
+    if(r.ok) applyData(await r.json()); }catch(e){}
+  cart = cart.filter(c => bySlug[c.slug]); saveCart(); setDir(DIR);
+})();
 </script>

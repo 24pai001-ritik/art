@@ -1,7 +1,19 @@
-# Live site today: the static preview (look D, Salon) served as Worker static assets.
+# Live site: the static pages in ./preview (look D, Salon) + worker/index.js for the studio dashboard (/studio).
+# Storage is one SQLite Durable Object (free plan). The login password is the Worker secret ADMIN_PASSWORD,
+# set in the Cloudflare dashboard (Workers > art > Settings > Variables and Secrets), never in this repo.
 # The full Astro + D1 + R2 config for later is in wrangler.astro-later.toml.
 name = "art"
+main = "worker/index.js"
 compatibility_date = "2026-11-01"
 
 [assets]
 directory = "./preview"
+binding = "ASSETS"
+
+[[durable_objects.bindings]]
+name = "STORE"
+class_name = "Store"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Store"]

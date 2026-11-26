@@ -8,3 +8,7 @@ content/raw/
 content/gen/*.jpg
 content/gen/*.png
 mockups/
+.wrangler-test/
+.wd/
+.wrangler/
+.dev.vars
