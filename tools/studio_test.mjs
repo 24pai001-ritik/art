@@ -51,12 +51,12 @@ try {
   const put = x => fetch(B + "/api/art", { method: "PUT", headers: { ...C, "content-type": "application/json" }, body: JSON.stringify(x) });
   const s1 = structuredClone(d2);
   s1.site.home = ["vacant", "hibiscus", "acceptance", "test-new", "old-man", "roses", "paper-weight"];
-  s1.site.frame.tex = "primed"; s1.works[1].fcolor = "#112233"; s1.works[1].ftex = "plain";
+  s1.site.frame.tex = "primed"; s1.works[1].fcolor = "#112233"; s1.works[1].ftex = "plain"; s1.works[2].fstyle = "gilt";
   s1.site.about.order = ["approach", "bio", "cv"]; s1.site.about.bio = ["New bio."];
   s1.site.pay = { upi: "jomy.art@okaxis", payee: "Jomy Johnson", qr: "qr-abc", methods: [{ name: "Bank transfer", text: "Ask for details", url: "" }, { name: "Pay link", text: "", url: "https://example.com/pay" }], live: true };
   r = await put(s1); ok(r.status === 200, "save site settings");
   const d3 = await (await fetch(B + "/api/art", { headers: C })).json();
-  ok(d3.site.home[3] === "test-new" && d3.site.frame.tex === "primed" && d3.works[1].fcolor === "#112233" && d3.works[1].ftex === "plain" && d3.site.about.order[0] === "approach" && d3.site.pay.upi === "jomy.art@okaxis" && d3.site.pay.methods.length === 2, "site settings read back");
+  ok(d3.site.home[3] === "test-new" && d3.site.frame.tex === "primed" && d3.works[1].fcolor === "#112233" && d3.works[1].ftex === "plain" && d3.works[2].fstyle === "gilt" && d3.site.about.order[0] === "approach" && d3.site.pay.upi === "jomy.art@okaxis" && d3.site.pay.methods.length === 2, "site settings read back");
   ok(d3.site.pay.live === false, "real payments stay off even when sent as on");
   const pub2 = await (await fetch(B + "/api/art")).json(); ok(pub2.site.pay.upi === undefined && pub2.site.home[3] === "test-new", "visitors still don't see pay details");
   const bad1 = structuredClone(d3); bad1.site.pay.methods = [{ name: "x", text: "", url: "javascript:alert(1)" }]; r = await put(bad1); ok(r.status === 400, "javascript: link = 400");
@@ -65,6 +65,7 @@ try {
   const bad4 = structuredClone(d3); bad4.site.about.bio = ["x".repeat(421)]; r = await put(bad4); ok(r.status === 400, "over-long bio = 400");
   const bad5 = structuredClone(d3); bad5.site.pay.upi = "not a upi"; r = await put(bad5); ok(r.status === 400, "bad UPI id = 400");
   const bad6 = structuredClone(d3); bad6.works[0].fcolor = "red"; r = await put(bad6); ok(r.status === 400, "bad frame colour = 400");
+  const bad7 = structuredClone(d3); bad7.works[0].fstyle = "gold"; r = await put(bad7); ok(r.status === 400, "unknown carved frame = 400");
   r = await fetch(B + "/api/img/test-new-abc", { method: "DELETE", headers: C }); ok(r.status === 200, "delete picture");
   r = await fetch(B + "/img/test-new-abc.webp"); ok(r.status === 404, "deleted picture = 404");
   r = await fetch(B + "/studio"); ok(r.status === 200 && (await r.text()).includes("Open the studio"), "/studio page served");

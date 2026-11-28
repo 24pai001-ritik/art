@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Studio · Jomy Johnson</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&display=swap">
@@ -123,6 +125,9 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
 .orow{grid-column:1/-1;display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:2px;padding:8px 10px;background:var(--field)}
 .orow b{font:600 18px/1.2 var(--display);margin-right:auto}
 .fc-row{display:flex;gap:6px}
+.framed.orn{padding:0!important;background:#111!important;border-style:solid;border-width:calc(var(--fw) * 2.2);border-image-repeat:stretch}
+.framed.orn-gilt{border-image-source:url(img/tex/frame_orn_gilt.webp);border-image-slice:17.8%}
+.framed.orn-bronze{border-image-source:url(img/tex/frame_orn_bronze.webp);border-image-slice:16.8% 16.5% 17.8% 16.7%}
 .fc-row select{flex:1;min-width:0}
 .fc-row input[type=color]{width:46px;padding:2px;flex:none;height:auto}
 .qrbox{display:flex;gap:12px;align-items:center}
@@ -205,7 +210,7 @@ form.fields{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(6p
       <label class="f"><span>Height, cm</span><input id="h" type="number" inputmode="decimal" step="0.5" min="1"></label>
       <label class="f"><span>Original</span><select id="status"><option value="available">For sale</option><option value="sold">Sold</option><option value="study">Not for sale</option></select></label>
       <label class="f"><span>Price, ₹</span><input id="price" type="number" inputmode="numeric" min="0" step="100"></label>
-      <label class="f"><span>Frame colour</span><span class="fc-row"><select id="fmode" aria-label="Frame colour"><option value="auto">Auto, from the painting</option><option value="own">My colour</option></select><input type="color" id="fcolor" aria-label="Pick the frame colour"></span></label>
+      <label class="f"><span>Frame</span><span class="fc-row"><select id="fmode" aria-label="Frame"><option value="auto">Plain, colour from the painting</option><option value="own">Plain, my colour</option><option value="gilt">Carved, silver-gilt</option><option value="bronze">Carved, dark bronze</option></select><input type="color" id="fcolor" aria-label="Pick the frame colour"></span></label>
       <label class="f"><span>Frame texture</span><select id="ftex"><option value="">Same as the site</option><option value="linen">Linen</option><option value="primed">Gesso</option><option value="plain">Plain</option></select></label>
       <label class="f check full"><input type="checkbox" id="prints"><span>Sell prints of this painting</span></label>
       <p class="hint" id="hint">Changes show on the website as soon as you save.</p>
@@ -341,7 +346,7 @@ function openEdit(a){
   $("#w").value = a ? a.cm[0] : ""; $("#h").value = a ? a.cm[1] : "";
   $("#status").value = a ? a.status : "available"; $("#price").value = a && a.price != null ? a.price : "";
   $("#prints").checked = a ? a.prints : true;
-  $("#fmode").value = a && a.fcolor ? "own" : "auto"; $("#fcolor").value = (a && (a.fcolor || a.edge)) || "#3a3028"; $("#ftex").value = (a && a.ftex) || "";
+  $("#fmode").value = a && a.fstyle ? a.fstyle : a && a.fcolor ? "own" : "auto"; $("#fcolor").value = (a && (a.fcolor || a.edge)) || "#3a3028"; $("#ftex").value = (a && a.ftex) || "";
   framePreview();
   $("#del").hidden = !a; syncPrice();
   show("edit");
@@ -352,11 +357,11 @@ $("#status").addEventListener("change", syncPrice);
 const TEXS = {linen:["img/tex/linen.webp","180px"], primed:["img/tex/primed.webp","260px"], plain:null};
 function frameVars(fc, own, tex){ const t = TEXS[tex || (data && data.site && data.site.frame.tex) || "linen"];
   return {"--fc":fc, "--fdark": own ? "100%" : "55%", "--ftex": t ? `url(${t[0]})` : "none", "--ftex-size": t ? t[1] : "auto"}; }
-function paint(el, v){ el.classList.add("framed"); Object.entries(v).forEach(([k,x]) => el.style.setProperty(k, x)); }
+function paint(el, v, orn){ el.classList.add("framed"); el.classList.remove("orn","orn-gilt","orn-bronze"); if(orn) el.classList.add("orn","orn-" + orn); Object.entries(v).forEach(([k,x]) => el.style.setProperty(k, x)); }
 function framePreview(){
-  const own = $("#fmode").value === "own"; $("#fcolor").disabled = !own;
+  const m = $("#fmode").value, orn = m === "gilt" || m === "bronze" ? m : null, own = m === "own"; $("#fcolor").disabled = !own; $("#fcolor").hidden = !!orn; $("#ftex").disabled = !!orn;
   const edge = (typeof pick !== "undefined" && pick && pick.edge) || (cur && cur.edge) || "#3a3028"; if(!own) $("#fcolor").value = edge;
-  const img = $("#pic img"); if(img) paint(img, frameVars(own ? $("#fcolor").value : edge, own, $("#ftex").value));
+  const img = $("#pic img"); if(img) paint(img, frameVars(own ? $("#fcolor").value : edge, own, $("#ftex").value), orn);
 }
 ["fmode","fcolor","ftex"].forEach(id => $("#" + id).addEventListener("input", framePreview));
 
@@ -407,7 +412,9 @@ $("#form").addEventListener("submit", async e => {
     if(cur){ row = next.works.find(a => a.slug === cur.slug); oldImg = row.img || null; }
     else { row = {slug: slugify(w.title) + "-" + tag().slice(-4), detail: false}; next.works.unshift(row); }
     Object.assign(row, w);
-    if($("#fmode").value === "own") row.fcolor = $("#fcolor").value; else delete row.fcolor;
+    const fm = $("#fmode").value;
+    if(fm === "own") row.fcolor = $("#fcolor").value; else delete row.fcolor;
+    if(fm === "gilt" || fm === "bronze") row.fstyle = fm; else delete row.fstyle;
     if($("#ftex").value) row.ftex = $("#ftex").value; else delete row.ftex;
     if(pick){
       const name = row.slug + "-" + tag();
@@ -486,7 +493,7 @@ function drawHome(){
     return `<div class="slot grab${i===3?" big":""}" data-slug="${sl}"><div class="lab">${PLACES[i]}</div><div class="pic"><img src="${src(a)}" alt=""></div>
       <select data-i="${i}" aria-label="Painting for ${PLACES[i]}">${opts(sl)}</select></div>`; }).join("");
   document.querySelectorAll("#slots .slot").forEach(el => { const a = bySlug(el.dataset.slug), im = el.querySelector("img");
-    paint(im, frameVars(a.fcolor || a.edge || "#3a3028", !!a.fcolor, a.ftex || htex)); im.style.setProperty("--fw","6px"); });
+    paint(im, frameVars(a.fcolor || a.edge || "#3a3028", !!a.fcolor, a.ftex || htex), a.fstyle); im.style.setProperty("--fw","6px"); });
   sortable($("#slots"), () => { hs = [...$("#slots").children].map(e => e.dataset.slug); drawHome(); });
   $("#texpick").innerHTML = `<span class="eyebrow">Frame texture</span>` + [["linen","Linen"],["primed","Gesso"],["plain","Plain"]].map(([k,l]) =>
     `<button type="button" data-tex="${k}" aria-pressed="${k===htex}"><i></i>${l}</button>`).join("");

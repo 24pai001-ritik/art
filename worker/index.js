@@ -63,6 +63,7 @@ function cleanArt(d) {
     /* frame: no fcolor = auto (dark shade of the painting's own ground); ftex missing = the site default */
     if (w.fcolor !== undefined) { if (!HEX.test(w.fcolor)) return null; o.fcolor = w.fcolor; }
     if (w.ftex !== undefined) { if (!TEX.includes(w.ftex)) return null; o.ftex = w.ftex; }
+    if (w.fstyle !== undefined) { if (!["gilt", "bronze"].includes(w.fstyle)) return null; o.fstyle = w.fstyle; } /* carved photographed frames */
     if (w.img !== undefined) { if (!NAME.test(w.img)) return null; o.img = w.img; }
     o.detail = !!w.detail;
     works.push(o);
